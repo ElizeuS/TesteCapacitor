@@ -1,0 +1,53 @@
+ion-content{
+  --ion-background-color: #000000 !important;
+  position: relative;
+  top: 50px;
+  left: 4px;
+
+  }
+
+  .TTT{
+    align-content: center;
+  }
+
+  .texts{
+    color:white;
+  }
+
+  .card-top2{
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    border-style: none;
+    align-content: top;
+    background-color: #000000;
+    border-radius: 0%;
+}
+
+  .card-color{
+    // background-color: rgb(105, 0, 0);
+     width: 50%;
+     height: 50px;
+     padding-top: 0px;
+     background-color: #ff0000;
+     //margin-top: 20px;
+     border-radius: 0%;
+    // margin: 0px;
+    left: 0px;
+    top: 0px;
+ }
+
+ .ion-header{
+   padding: 0%;
+ }
+ 
+ #containerSensogramaAIM{
+   display: none;
+ }
+
+ ion-col{
+  padding-top:0px;
+  padding-bottom:0px;
+  padding-left:0px;
+  padding-right:0px;
+}

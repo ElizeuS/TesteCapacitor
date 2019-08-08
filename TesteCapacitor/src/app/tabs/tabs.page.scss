@@ -1,0 +1,82 @@
+ //---------------------------------------PARTE SUPERIOR------------------------------------------
+  //Card do conteúdo da cor
+  /*.card-color{
+    // background-color: rgb(105, 0, 0);
+     width: 50%;
+     height: 50px;
+     padding-top: 0px;
+     //margin-top: 20px;
+     border-radius: 0%;
+    // margin: 0px;
+ }
+
+ */
+ //Barra de configuração de cor
+ .ligth-bar{
+     margin: 2px;
+     height: 50px;
+     align-content: center;
+     box-align: center;
+     padding-top: 0px;
+     opacity: 1;
+     border-style: none;
+
+ }
+
+ .card-top{
+    width: 100%;
+    padding-top: 0px;
+    margin: 0px;
+    border-style: none;
+    align-content: top;
+    background-color: #000000;
+    border-radius: 0%;
+}
+
+.ion-header{
+    border-style: none;
+    border-bottom: 0px;
+    box-shadow: 0;
+    padding: 0px;
+    border-style: none;
+   // margin: 0px;
+  
+
+}
+
+#card-top2{
+   padding: 0px;
+   margin: 0px;
+  }
+
+  .waveletValue{
+     color: white;
+     padding: 0px;
+  }
+
+//------------------------------------------Barra Inferior------------------------------
+.button-tab{
+    background-color: #000000;
+    margin-top: 1px;
+    margin-bottom: 1px;
+ }
+
+ ion-tab-bar{
+    background-color: #000000;
+    border-top-color: antiquewhite;
+ }
+ 
+
+ //--------------------------------------------Fim--------------------------------------
+
+
+#card-color2{
+    height: 80px;
+    padding: 2px;
+   }
+
+//--------------------------------------FIM---------------------------------------------------------
+ 
+ion-content{
+   --ion-background-color: #000000 !important;
+}

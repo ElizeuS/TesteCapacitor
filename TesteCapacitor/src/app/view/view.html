@@ -1,0 +1,58 @@
+<ion-header class="ion-header">
+      <ion-card class="card-top2">
+        <ion-card-header class="card-color" id="card-color2">
+        </ion-card-header>
+      </ion-card>
+    
+    </ion-header>
+<ion-content>
+    
+    <div id="containerAIM"></div>
+    <div id="containerSensogramaAIM"></div>
+    <ion-grid class="texts">
+        <ion-row>
+            <ion-col>Assimetry</ion-col>
+            <ion-col>Min</ion-col>
+            <ion-col>Width</ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>{{assimetria}}</ion-col>
+            <ion-col>{{minHunter}}</ion-col>
+            <ion-col>{{largura}}</ion-col>
+        </ion-row>
+    </ion-grid>
+    <ion-segment bottom (ionChange)="changeChart($event)" color="Primary" mode="md" value="aim">
+        <ion-segment-button value="aim" (click) = "aimShow()">
+            <ion-label class="texts">SPR</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="sensogram" (click) = "sensogramaShow()">
+            <ion-label class="texts">Sensogram</ion-label>
+        </ion-segment-button>
+    </ion-segment>
+  
+</ion-content>
+<footer>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                
+            </ion-col>
+            <ion-col>
+               
+            </ion-col>
+            <ion-col>
+                
+
+            </ion-col>
+            <ion-col>
+               
+            </ion-col>
+            <ion-col>
+                <ion-fab-button color="light" size="small" (click)="calibraDryCell()">Dry</ion-fab-button>
+            </ion-col>
+            <ion-col>
+                <ion-fab-button color="light" size="small">Clear</ion-fab-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</footer>

@@ -1,0 +1,7 @@
+{
+  "name": "TesteCapacitor",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
