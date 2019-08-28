@@ -165,12 +165,12 @@ export class Advanced {
 
   ngDoCheck() {
 
-    this.minHunter = this.cameraService.minimoHunter;
-    this.largura = this.cameraService.largura;
-    this.assimetria = this.cameraService.assimetria;
+    //this.minHunter = this.cameraService.minimoHunter;
+    //this.largura = this.cameraService.largura;
+   // this.assimetria = this.cameraService.assimetria;
 
-    this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
-    this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);
+   // this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
+   // this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);
   }
 
   //MÉTODO PARA MOSTRAR OU ESCONDER A CÂMERA

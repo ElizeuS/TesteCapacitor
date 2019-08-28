@@ -49,14 +49,18 @@ assimetria: any;
                 text: "Reflexivity",
                 style: { "color": "#ffffff" },
             },
-            max: 1.2,
-            min: 0
+            max: 2,
+            min: -2
         },
         xAxis: {
             title: {
                 text: "Angle",
                 style: { "color": "#ffffff" }
             }
+        },
+        tooltip: {
+            headerFormat: '<b>{series.name}</b><br/>',
+            pointFormat: 'Angle/Wavelength: {point.x:2f}<br/>RIU: {point.y:.4f}'
         },
         title: {
             text: 'AIM Curve',

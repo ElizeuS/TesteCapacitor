@@ -28,8 +28,8 @@ export class CameraService {
   private _indicesGraphic = [];
   private _indicesMin = [];
   private _indicesAtuais = [];
- 
-
+  private _channel = 0; //variavel para o canal (R, G, B) (0, 1, 2)
+  
 
   private _smoothinMode = 0; //Variável de seleção de suaviação
 
@@ -41,21 +41,22 @@ export class CameraService {
   
   public constructor(private _cameraPreview: CameraPreview) {
     this.comp = 670;
+    this._channel = 0; //Setando o canal inicial Verlelho (0)
 
   }
 
-  // picture options
+  // picture options, opções das fotos tiradas
   private _pictureOpts: CameraPreviewPictureOptions = {
     width: 250,
     height: 250,
-    quality: 80
+    quality: 85 //0=max compression, 100=max quality
   };
 
   private _cameraPreviewOpts: CameraPreviewOptions = {
-    x: 200,
-    y: 200,
-    width: 50,
-    height: 50,
+    x: 200, //Posição em que a câmera vai aparecer
+    y: 200, //Posição em que a câmera vai aparecer
+    width: 60,
+    height: 60,
     tapPhoto: true,
     previewDrag: true,
     toBack: false,
@@ -78,7 +79,7 @@ export class CameraService {
 
   async takePicture() {
     //alert("TAKE PICTURE");
-    this._firstImage = this._cameraPreview.setColorEffect('mono');
+    //this._firstImage = this._cameraPreview.setColorEffect('mono');
     this._cameraPreview.takePicture(this._pictureOpts).then(
       (res) => {
         this.picture = 'data:image/jpeg;base64,' + res; // convertendo a imagem em data string jpeg
@@ -118,6 +119,18 @@ export class CameraService {
 
   async refreshCanvas(image: MarvinImage) {
     image.draw(document.getElementById("canvasFilters"));
+  }
+
+
+  //TERMINAR ESSAFUNÇÃO, VERIFICAR CANAL RGB PARA SELECIONAR A AMOSTRAGEM.
+  checkChannel(i, j, imagem){
+    if(this.channel == 0){
+
+    }else if(this.channel == 1){
+
+    }else if(this.channel == 2){
+
+    }
   }
 
   async getPointSpr(image: MarvinImage) {
@@ -223,7 +236,7 @@ export class CameraService {
 
   }
 
-  normalizacao(dadosAIM: number[]) {
+  async normalizacao(dadosAIM: number[]) {
     let min = 255.0;
     let max = 0;
     let dados = [];
@@ -256,7 +269,7 @@ export class CameraService {
   /** 
    * @method verifyHideShowCam() Verifica e exibe/esconde a câmera
    * */
-  verifyHideShowCam() {
+  async verifyHideShowCam() {
     switch (this._cameraPreviewOpts.toBack) {
       case true:
         this._cameraPreviewOpts.toBack = false;
@@ -313,6 +326,12 @@ export class CameraService {
   }
   public set indicesAtuais(value) {
     this._indicesAtuais = value;
+  }
+  public get channel() {
+    return this._channel;
+  }
+  public set channel(value) {
+    this._channel = value;
   }
 
 }
