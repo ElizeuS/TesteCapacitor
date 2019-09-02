@@ -34,7 +34,7 @@ export class CameraService {
   private _smoothinMode = 0; //Variável de seleção de suaviação
 
 
-
+  private auxmin: any;
   private _minimoHunter: any;
   private _assimetria: any;
   private _largura: any;
@@ -229,6 +229,7 @@ export class CameraService {
     this._largura = parseFloat("" + (valorCL - valorCR).toFixed(3));
     this._assimetria = parseFloat("" + (valorCL / valorCR).toFixed(3));
     this._minimoHunter = parseFloat("" + min.toFixed(3));
+    this.auxmin = parseFloat("" + min.toFixed(3));
 
     // this.chartSensorgrama.series[0].addPoint([min]);
     this._indicesMin.push(this._minimoHunter);

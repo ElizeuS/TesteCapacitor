@@ -84,7 +84,19 @@ assimetria: any;
                 lineColor: "red", // cor do contorno do ponto
                 radius: 3
             },
-        }]
+
+        },
+    {   
+        name: "Reference",
+        type: undefined,
+        marker: {
+            symbol: 'circle', //"circle", "square", "diamond", "triangle" and "triangle-down".
+            lineWidth: null, //largura da inha de contorno
+            fillColor: 'blue', //cor do preenchimento do ponto
+            lineColor: "blue", // cor do contorno do ponto
+            radius: 3
+        },
+    }]
     });
 }
 
@@ -193,6 +205,7 @@ assimetria: any;
     
     this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
     this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);
+    //this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService.indicesAtuais)) //plotando os valores de referência
 
   }
   
@@ -235,6 +248,13 @@ sensogramaShow(){
 
 
 }
+
+clear() {
+   //alert(this.cameraService.indicesMin);
+    this.cameraService.indicesMin = []; //Apaga os valores do gráfico do sensograma
+
+}
+
 
 }
 
