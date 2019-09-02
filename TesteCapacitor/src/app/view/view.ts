@@ -50,7 +50,7 @@ assimetria: any;
                 style: { "color": "#ffffff" },
             },
             max: 2,
-            min: -2
+            min: -1
         },
         xAxis: {
             title: {
@@ -60,7 +60,7 @@ assimetria: any;
         },
         tooltip: {
             headerFormat: '<b>{series.name}</b><br/>',
-            pointFormat: 'Angle/Wavelength: {point.x:2f}<br/>RIU: {point.y:.4f}'
+            pointFormat: 'Pixel/(θ)/(λ): {point.x:4f}<br/>RIU: {point.y:.4f}'
         },
         title: {
             text: 'AIM Curve',
@@ -69,14 +69,21 @@ assimetria: any;
         plotOptions: {
             series: {
                 allowPointSelect: true,
-                color: 'rgba(223,83,83, .5)',
+                color: 'rgba(255,0,0, .1)',
                 showInLegend: false
             }
         },
          series:[{
             name: 'Angle',
-            type: undefined //No Ionic 4, se faltar essa parte dar um erro que pode demorar em media 4 horas
+            type: undefined, //No Ionic 4, se faltar essa parte dar um erro que pode demorar em media 4 horas
             //data: [[0.6, 0.2]]
+            marker: {
+                symbol: 'circle', //"circle", "square", "diamond", "triangle" and "triangle-down".
+                lineWidth: null, //largura da inha de contorno
+                fillColor: 'red', //cor do preenchimento do ponto
+                lineColor: "red", // cor do contorno do ponto
+                radius: 3
+            },
         }]
     });
 }
@@ -121,7 +128,7 @@ assimetria: any;
         },
         tooltip: {
             headerFormat: '<b>{series.name}</b><br/>',
-            pointFormat: 'x: {point.x:2f}<br/>y: {point.y:.4f}'
+            pointFormat: 'Time: {point.x:2f}<br/>y: {point.y:.4f}'
         },
         legend: {
             enabled: true,
