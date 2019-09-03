@@ -5,25 +5,17 @@
   </ion-card>
   <!-- CARD DO RANGE KNOB -->
   <ion-card id="card-top2">
-    <ion-range
-      min="380"
-      max="781"
-      step="1"
-      (ionChange)="corEvento($event)"
-      start="670"
-      mode="md"
-      id="knob"
-      snaps="true"
-    ></ion-range>
+    <ion-range min="380" max="781" step="1" (ionChange)="corEvento($event)" start="670" mode="md" id="knob"
+      snaps="true"></ion-range>
     <!--<ion-range dualKnobs="true" min="-5" max="5" step="1" snaps="true" pin="true"></ion-range>-->
     <p class="waveletValue" text-center>
-      <b> λ = {{ comprimento_deOnda }} <i>nm</i></b>
+      <b> λ =  <i>nm</i></b>
     </p>
   </ion-card>
 </ion-header>
 <ion-content>
-    <div id="containerAIM"></div>
-    <div id="containerSensogramaAIM"></div>
+  <div id="containerAIM"></div>
+  <div id="containerSensogramaAIM"></div>
   <div>
     <!--<ion-range dualKnobs="true" min="-5" max="5" step="1" snaps="true" pin="true" (ionChange)="minMax($event)" [disabled]="disabled"></ion-range>-->
     <ion-grid class="texts">
@@ -31,25 +23,19 @@
         <ion-col>Assimetry</ion-col>
         <ion-col>Min</ion-col>
         <ion-col>Width</ion-col>
-    </ion-row>
-    <ion-row>
+      </ion-row>
+      <ion-row>
         <ion-col>{{assimetria}}</ion-col>
         <ion-col>{{minHunter}}</ion-col>
         <ion-col>{{largura}}</ion-col>
-    </ion-row>
+      </ion-row>
     </ion-grid>
   </div>
-  <ion-segment
-    bottom
-    (ionChange)="changeChart($event)"
-    color="Primary"
-    mode="md"
-    value="aim"
-  >
-    <ion-segment-button value="aim" (click) = "aimShow()">
+  <ion-segment bottom (ionChange)="changeChart($event)" color="Primary" mode="md" value="aim">
+    <ion-segment-button value="aim" (click)="aimShow()">
       <ion-label class="texts">SPR</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="sensogram" (click) = "sensogramaShow()">
+    <ion-segment-button value="sensogram" (click)="sensogramaShow()">
       <ion-label class="texts">Sensogram</ion-label>
     </ion-segment-button>
   </ion-segment>
@@ -71,20 +57,12 @@
         </ion-fab>
       </ion-col>
       <ion-col>
-        <ion-fab-button
-          color="light"
-          size="small"
-          (click)="ligthCardPosition()"
-        >
+        <ion-fab-button color="light" size="small" (click)="ligthCardPosition()">
           <ion-icon name="bulb"></ion-icon>
         </ion-fab-button>
       </ion-col>
       <ion-col>
-        <ion-fab-button
-          id="tac"
-          color="light"
-          size="small"
-        >
+        <ion-fab-button id="tac" color="light" size="small">
           <ion-icon name="md-color-filter"></ion-icon>
         </ion-fab-button>
       </ion-col>

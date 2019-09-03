@@ -91,8 +91,9 @@ export class TabsPage {
   }
 
   setColor(r, g, b){
-    let teste = document.getElementById("card-color");
+    let teste = document.getElementById("card-color2");
     teste.style.backgroundColor = `rgb(${r},${g}, ${b})`;
+    
     
   }
 
