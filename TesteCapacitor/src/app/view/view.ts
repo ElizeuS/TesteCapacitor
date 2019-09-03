@@ -66,15 +66,34 @@ assimetria: any;
             text: 'AIM Curve',
             style: { "color": "#ffffff" },
         },
+        legend: {
+
+            backgroundColor: '#5F5A59',
+            shadow: true,
+            layout: 'vertical',
+            width: 100,
+            itemMarginTop: 2,
+            itemMarginBottom: 2,
+
+            //Estilo da legenda padrão
+            itemStyle: { 
+                color: '#ffffff',
+                fontWeight: 'bold'
+            },
+            //Estilo da legenda ao clicar
+            itemHiddenStyle: {
+                color: '#AEAEAE'
+            }
+        },
         plotOptions: {
             series: {
                 allowPointSelect: true,
                 color: 'rgba(255,0,0, .1)',
-                showInLegend: false
+                showInLegend: true
             }
         },
          series:[{
-            name: 'Angle',
+            name: 'Angle  ',
             type: undefined, //No Ionic 4, se faltar essa parte dar um erro que pode demorar em media 4 horas
             //data: [[0.6, 0.2]]
             marker: {
@@ -205,7 +224,7 @@ assimetria: any;
     
     this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
     this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);
-    //this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService.indicesAtuais)) //plotando os valores de referência
+    this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)) //plotando os valores de referência
 
   }
   
@@ -252,7 +271,7 @@ sensogramaShow(){
 clear() {
    //alert(this.cameraService.indicesMin);
     this.cameraService.indicesMin = []; //Apaga os valores do gráfico do sensograma
-
+    //alert(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)) 
 }
 
 

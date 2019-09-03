@@ -237,7 +237,7 @@ export class CameraService {
 
   }
 
-  async normalizacao(dadosAIM: number[]) {
+   normalizacao(dadosAIM: number[]) {
     let min = 255.0;
     let max = 0;
     let dados = [];
@@ -256,7 +256,7 @@ export class CameraService {
     //Descomente o codigo abaixo para apresentar no grafico
     //this.graficoAIM.series[1].setData(dados); //DESCOMENTAR
     //console.log(dadosAIM);
-
+    return dados;
   }
 
   //Atualiza os valores de DryCell
