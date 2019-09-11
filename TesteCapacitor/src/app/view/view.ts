@@ -67,6 +67,7 @@ export class View {
             },
             title: {
                 text: 'AIM Curve',
+                margin: 0, //margem do titulo para o gráfico
                 style: { "color": "#ffffff" },
             },
             legend: {
@@ -75,8 +76,9 @@ export class View {
                 shadow: true,
                 layout: 'vertical',
                 width: 100,
-                itemMarginTop: 2,
-                itemMarginBottom: 2,
+                maxHeight: 30,
+                itemMarginTop: 0,
+                itemMarginBottom: 0,
 
                 //Estilo da legenda padrão
                 itemStyle: {
