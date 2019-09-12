@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MarvinImage } from 'marvin';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions } from '@ionic-native/camera-preview/ngx'
 import { Filter, GrayScaleFilter } from '../models/filter';
-import { median } from 'filters';
+import { median, average } from 'filters';
 
 @Injectable({
   providedIn: 'root'
@@ -24,17 +24,18 @@ export class CameraService {
 
   arrayMin: [];
 
-  _windowValue: any;
+  
   private _indicesGraphic = [];
   private _indicesMin = [];
   private _indicesAtuais = [];
   private _channel = 0; //variavel para o canal (R, G, B) (0, 1, 2)
   
+  
 
-  private _smoothinMode = 0; //Variável de seleção de suaviação
+  private _smoothinMode = 0; //Variável de seleção de suaviação 0 = nennhum, 1 = mediana, 2 = media
+  private _windowsValue: 3; //Valor da janela de suavização
+  
 
-
-  private auxmin: any;
   private _minimoHunter: any;
   private _assimetria: any;
   private _largura: any;
@@ -42,7 +43,8 @@ export class CameraService {
   public constructor(private _cameraPreview: CameraPreview) {
     this.comp = 670;
     this._channel = 0; //Setando o canal inicial Verlelho (0)
-
+    this.windowsValue = 3;
+    this.smoothinMode = 0;
   }
 
   // picture options, opções das fotos tiradas
@@ -67,7 +69,7 @@ export class CameraService {
    // console.log("Entrou na funcao");
     this.picture = null;
     this._cameraPreview.startCamera(this._cameraPreviewOpts).then(
-      (res) => {
+      () => {
         //alert("entrou" + res);
         this.takePicture();
         //this._firstImage = this._cameraPreview.setColorEffect('mono');
@@ -123,7 +125,7 @@ export class CameraService {
 
 
   //TERMINAR ESSAFUNÇÃO, VERIFICAR CANAL RGB PARA SELECIONAR A AMOSTRAGEM.
-  checkChannel(i, j, imagem){
+  checkChannel(){
     if(this.channel == 0){
 
     }else if(this.channel == 1){
@@ -136,7 +138,6 @@ export class CameraService {
   async getPointSpr(image: MarvinImage) {
     let _soma = [];
     let _media = [];
-    let _dados = [];
 
     //Percorre o array para pegar as somas dos valores por coluna
     for (let i = 0; i < image.getHeight(); i++) {
@@ -156,8 +157,6 @@ export class CameraService {
 
     }
 
-    this.indicesAtuais = _media; //guarda os valores das imaqgem atual
-
 
     if (this._currentIndicesDryCell.length == 0) {
       //verifica se os valores de referência estão vazios e setam o vetor
@@ -168,10 +167,20 @@ export class CameraService {
     for (let i = 0; i < _media.length; i++) {
       dadosAIM.push(_media[i] / this._currentIndicesDryCell[i]);
     }
-      
+    
+  
+    if (this._smoothinMode == 0){
+      this._indicesGraphic = dadosAIM; //guarda os valores das imaqgem atual
+    } else if(this._smoothinMode == 1){
+      this._indicesGraphic = median(dadosAIM, this.windowsValue);
+    } else if(this._smoothinMode == 2){
+      this._indicesGraphic = average(dadosAIM, this.windowsValue);
+    }
+    
+    
       //this._indicesGraphic.push(dadosAIM);
 
-      this._indicesGraphic = dadosAIM;
+     // this._indicesGraphic = dadosAIM;
 
       //alert(this._indicesGraphic);
 
@@ -229,7 +238,6 @@ export class CameraService {
     this._largura = parseFloat("" + (valorCL - valorCR).toFixed(3));
     this._assimetria = parseFloat("" + (valorCL / valorCR).toFixed(3));
     this._minimoHunter = parseFloat("" + min.toFixed(3));
-    this.auxmin = parseFloat("" + min.toFixed(3));
 
     // this.chartSensorgrama.series[0].addPoint([min]);
     this._indicesMin.push(this._minimoHunter);
@@ -334,5 +342,10 @@ export class CameraService {
   public set channel(value) {
     this._channel = value;
   }
-
+  public get windowsValue(): any {
+    return this._windowsValue;
+  }
+  public set windowsValue(value: any) {
+    this._windowsValue = value;
+  }
 }

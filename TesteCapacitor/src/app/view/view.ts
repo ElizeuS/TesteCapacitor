@@ -1,10 +1,12 @@
 import { Component, SimpleChange, ViewChild } from '@angular/core';
 import { CameraService } from '../services/camera.service';
 import * as HighCharts from 'highcharts';
-import { getHighChartData, getHighChartData2 } from '../data/Chart-fake';
+//import { getHighChartData, getHighChartData2 } from '../data/Chart-fake';
 import * as $ from "jquery";
 import { TabsPage } from '../tabs/tabs.page';
-import { IonSegment } from '@ionic/angular';
+import { IonSegment, AlertController } from '@ionic/angular';
+
+
 
 @Component({
     selector: 'app-view',
@@ -21,8 +23,9 @@ export class View {
     comprimento_deOnda: any;
     compri: any;
 
+
     @ViewChild(IonSegment) segment: IonSegment;
-    public constructor(private cameraService: CameraService, public tabsPage: TabsPage) {
+    public constructor(private cameraService: CameraService, public tabsPage: TabsPage, private alertCtrl: AlertController) {
         //this.charData = getHighChartData;
         this.compri = 670;
         console.log(this.cameraService.comp);
@@ -95,6 +98,12 @@ export class View {
                     allowPointSelect: true,
                     color: 'rgba(255,0,0, .1)',
                     showInLegend: true
+                }
+            },
+            exporting: {
+                enabled: true,
+                csv: {
+                    itemDelimiter: ','
                 }
             },
             series: [{
@@ -277,19 +286,103 @@ export class View {
         //alert(this.cameraService.indicesMin);
         this.cameraService.indicesMin = []; //Apaga os valores do gráfico do sensograma
         //alert(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)) 
+
     }
 
     public corEvento(comprimentoDeOnda) {
-       if(comprimentoDeOnda === 781)
-       this.comprimento_deOnda = "comprimentoDeOnda.detail.value";
-       else
-        this.comprimento_deOnda = comprimentoDeOnda.detail.value;
+        if (comprimentoDeOnda === 781)
+            this.comprimento_deOnda = "comprimentoDeOnda.detail.value";
+        else
+            this.comprimento_deOnda = comprimentoDeOnda.detail.value;
 
         this.cameraService.comp = comprimentoDeOnda.detail.value;
         //console.log(comprimentoDeOnda.detail.value);
         this.tabsPage.cor(this.cameraService.comp);
         this.compri = this.tabsPage.comprimentoDeOn;
-      }
+    }
+
+
+    async smoothingMethod() {
+        const alert = await this.alertCtrl.create({
+            header: "Choose the smoothing method",
+            inputs: [
+                {
+                    name: "Median",
+                    type: "radio",
+                    label: "Median Filtering",
+                    value: "median",
+                    checked: true
+                },
+                {
+                    name: "Averaging",
+                    type: "radio",
+                    label: "Averaging",
+                    value: "averaging"
+                }
+            ],
+            buttons: [
+                {
+                    text: "Cancel",
+                    role: "cancel",
+                    cssClass: "secondary",
+                    handler: () => {
+                        console.log("Confirm Cancel");
+                    }
+                },
+                {
+                    text: "Ok",
+                    handler: data => {
+                        //this.testRadioOpen = false;
+                        
+                        if (data == "median") {
+                            this.cameraService.smoothinMode = 1;
+                            this.windowDialog();
+                            
+                        } else if (data == "averaging") {
+                            this.cameraService.smoothinMode = 2;
+                            this.windowDialog();
+                        }
+                        console.log(data);
+                        console.log("Confirm Ok");
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
+    }
+
+    async windowDialog() {
+        const prompt = await this.alertCtrl.create({
+            header: "Interval",
+            message: "Enter the value of the window",
+            inputs: [
+                {
+                    name: "windows",
+                    placeholder: "Window Value",
+                    type: "number"
+                }
+            ],
+            buttons: [
+                {
+                    text: "Cancel",
+                    handler: data => {
+                        console.log("Cancel clicked");
+                    }
+                },
+                {
+                    text: "Save",
+                    handler: data => {
+                        console.log("Executar o metodo aqui!!!");
+                        //alert(data.windows);
+                        this.cameraService.windowsValue = data.windows;
+                        //this.data = data.mediana;
+                    }
+                }
+            ]
+        });
+        await prompt.present();
+    }
 
 
 }
