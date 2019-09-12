@@ -169,6 +169,7 @@ export class CameraService {
     }
     
   
+    //PROCESSO QUE VERIFICA A OPÇÃO DE SUAVIZAÇÃO ESCOLHIDA E APLICA O MÉTODO
     if (this._smoothinMode == 0){
       this._indicesGraphic = dadosAIM; //guarda os valores das imaqgem atual
     } else if(this._smoothinMode == 1){
@@ -199,11 +200,12 @@ export class CameraService {
      } else {
          this.graficoAIM.series[0].setData(median(dadosAIM, this.data));
      }
+
+
    */
     /**
      * A função a seguir realiza a normalização dos valores de referência.
      */
-
     this.normalizacao(this._currentIndicesDryCell);
 
     let min = 255.0;
@@ -271,8 +273,6 @@ export class CameraService {
   dry(){
     this._currentIndicesDryCell = this._indicesAtuais;
   }
-
-
 
 
   /** 
