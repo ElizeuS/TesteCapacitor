@@ -5,6 +5,7 @@ import * as HighCharts from 'highcharts';
 import * as $ from "jquery";
 import { TabsPage } from '../tabs/tabs.page';
 import { IonSegment, AlertController } from '@ionic/angular';
+import { isString } from "highcharts";
 
 
 
@@ -213,13 +214,14 @@ export class View {
 
     }
 
-    changeChart(type) {
-        // this.charData = type.detail.value === 'sensogram' ? getHighChartData2 : this.graficoAIM;
-        const valorSegmento = type.detail.value;
-
-    }
+    /* changeChart(type) {
+         // this.charData = type.detail.value === 'sensogram' ? getHighChartData2 : this.graficoAIM;
+         const valorSegmento = type.detail.value;
+ 
+     }
+     */
     ngDoCheck() {
-        let teste = document.getElementById("card-color2")
+        let teste = document.getElementById("card-color")
         let r = this.cameraService.r;
         let g = this.cameraService.g;
         let b = this.cameraService.b;
@@ -242,7 +244,6 @@ export class View {
 
     }
 
-
     ngOnInit() {
         this.chartAIM(); //Essa função está sendo inicializada assim que o aplicativo começa a ser executado
 
@@ -250,6 +251,11 @@ export class View {
         //this.graficoAIM.series[0].setData(this.cameraService._indicesGraphic);
 
     }
+
+    hideShowCam() {
+        this.cameraService.verifyHideShowCam();
+    }
+
 
 
     /*clickHide() {
@@ -266,10 +272,10 @@ export class View {
 
     //aimShow() Exibe a div do gráfico AIM e oculta a div do gráfico Sensograma
     aimShow() {
-        let senso = document.getElementById("containerSensogramaAIM");
-        let aim = document.getElementById("containerAIM");
-        aim.style.display = "block";
-        senso.style.display = "none";
+        let sensog = document.getElementById("containerSensogramaAIM");
+        let aims = document.getElementById("containerAIM");
+        aims.style.display = "block";
+        sensog.style.display = "none";
 
     }
     //Faz o inverso da aimShow()
@@ -289,7 +295,7 @@ export class View {
 
     }
 
-    public corEvento(comprimentoDeOnda) {
+    public async corEvento(comprimentoDeOnda) {
         if (comprimentoDeOnda === 781)
             this.comprimento_deOnda = "comprimentoDeOnda.detail.value";
         else
@@ -333,11 +339,11 @@ export class View {
                     text: "Ok",
                     handler: data => {
                         //this.testRadioOpen = false;
-                        
+
                         if (data == "median") {
                             this.cameraService.smoothinMode = 1;
                             this.windowDialog();
-                            
+
                         } else if (data == "averaging") {
                             this.cameraService.smoothinMode = 2;
                             this.windowDialog();
@@ -384,6 +390,108 @@ export class View {
         await prompt.present();
     }
 
+    //MÉTODO RESPONSÁVEL POR ALTERAR A POSIÇÃO DO CARD DA FONTE DE LUZ
+  async ligthCardPosition() {
+    const alert = await this.alertCtrl.create({
+      header: "Position of the Light Source",
+      inputs: [
+        {
+          name: "Left",
+          type: "radio",
+          label: "Left",
+          value: "left",
+          checked: true
+        },
+        {
+          name: "Right",
+          type: "radio",
+          label: "Right",
+          value: "right"
+        }
+      ],
+      buttons: [
+        {
+          text: "Cancel",
+          role: "cancel",
+          cssClass: "secondary",
+          handler: () => {
+            console.log("Confirm Cancel");
+          }
+        },
+        {
+          text: "Ok",
+          handler: data => {
+            if (data == "left") {
+              this.cardSize("left");
+            } else if (data == "right") {
+              this.cardSize("right");
+            }
+
+            console.log("Confirm Ok");
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  //MÉTODO RESPONSÁVEL POR APLICAR AS MUDANÇAS DE TAMANHO D CARD DE FONTE DE LUZ
+  async cardSize(position: String) {
+    //console.log("A função está sendo chamada");
+
+    let alert = await this.alertCtrl.create({
+      header: "Dimensions of the Light Source",
+      inputs: [
+        {
+          name: "height",
+          placeholder: "height: [100] base value"
+        },
+        {
+          name: "width",
+          placeholder: "width: [140] base value"
+        }
+      ],
+      buttons: [
+        {
+          text: "Cancel",
+          role: "Cancel"
+        },
+        {
+          text: "Save",
+          handler: data => {
+            let valorTamanho = document.getElementById("card-color");
+            let tAltura = data.height;
+            let tLargura = data.width;
+            valorTamanho.style.width = `${tLargura}px`;
+            valorTamanho.style.height = `${tAltura}px`;
+
+            if (isString(position)) {
+              valorTamanho.style.cssFloat = String(position);
+              valorTamanho.style.paddingTop = "0px";
+            } else {
+              valorTamanho.style.cssFloat = "none";
+              valorTamanho.style.paddingTop = "0px";
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+    clickHide() {
+        let bar = document.getElementById("knob");
+        if (bar.style.display == "none") {
+            bar.style.display = "block";
+            // $('ion-range').hide();
+        } else {
+            bar.style.display = "none";
+            //$('ion-range').show()
+        }
+
+    }
 
 }
 

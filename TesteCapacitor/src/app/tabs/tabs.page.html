@@ -3,13 +3,13 @@
 <!-------------------------------GUIA DE TABS INFERIORES-------------------------------------->
 <ion-tabs>
 
-  <ion-tab-bar slot="bottom" class="tabs-guide">
-    <ion-tab-button tab="view" class="button-tab">
+  <ion-tab-bar  slot="bottom" class="tabs-guide">
+    <ion-tab-button (click)="desativarModos()" class="buttonChoise">
       <ion-icon name="pulse"></ion-icon>
       <ion-label>View Mode</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button class="button-tab">
+    <ion-tab-button (click)="ativarModos()" class="buttonChoise">
       <ion-icon name="options"></ion-icon>
       <ion-label>Advanced Mode</ion-label>
     </ion-tab-button>

@@ -97,7 +97,27 @@ export class TabsPage {
     
   }
 
-  
+  ativarModos(){
+    let button1 = document.getElementById("advancedMode");
+    let button2 = document.getElementById("advancedMode2");
+    let button3 = document.getElementById("advancedMode3");
+    let button4 = document.getElementById("advancedMode4");
+    button1.style.display = "block";
+    button2.style.display = "block";
+    button3.style.display = "block";
+    button4.style.display = "block";
+  }
+
+  desativarModos(){
+    let button1 = document.getElementById("advancedMode");
+    let button2 = document.getElementById("advancedMode2");
+    let button3 = document.getElementById("advancedMode3");
+    let button4 = document.getElementById("advancedMode4");
+    button1.style.display = "none";
+    button2.style.display = "none";
+    button3.style.display = "none";
+    button4.style.display = "none";
+  }
 
 
 }

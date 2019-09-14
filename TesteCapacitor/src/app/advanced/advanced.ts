@@ -174,10 +174,10 @@ export class Advanced {
   }
 
   //MÉTODO PARA MOSTRAR OU ESCONDER A CÂMERA
-  hideShowCam() {
-    this.cameraService.verifyHideShowCam();
+ /* hideShowCam() {  DESCOMENTAR SE FOR USAR
+    this.cameraService.verifyHideShowCam(); 
   }
-
+*/
   /* Métodos para dialogos sobre Mediana*/
   async smoothingMethod() {
     const alert = await this.alertCtrl.create({
@@ -253,7 +253,7 @@ export class Advanced {
     });
     await prompt.present();
   }
-
+/*
   //MÉTODO RESPONSÁVEL POR ALTERAR A POSIÇÃO DO CARD DA FONTE DE LUZ
   async ligthCardPosition() {
     const alert = await this.alertCtrl.create({
@@ -300,6 +300,7 @@ export class Advanced {
     await alert.present();
   }
 
+  /*
   //MÉTODO RESPONSÁVEL POR APLICAR AS MUDANÇAS DE TAMANHO D CARD DE FONTE DE LUZ
   async cardSize(position: String) {
     //console.log("A função está sendo chamada");
@@ -344,7 +345,7 @@ export class Advanced {
 
     await alert.present();
   }
-
+*/
   changeChart(type) {
     console.log(type.detail.value);
   }
@@ -486,7 +487,7 @@ export class Advanced {
   }
 
   //aimShow() Exibe a div do gráfico AIM e oculta a div do gráfico Sensograma
-aimShow(){
+/*aimShow(){
   let senso = document.getElementById("containerSensogramaAIM");
   let aim = document.getElementById("containerAIM");
   aim.style.display = "block";
@@ -501,5 +502,5 @@ aimShow(){
    senso.style.display = "block";
   
   
-  }
+  }*/
 }
