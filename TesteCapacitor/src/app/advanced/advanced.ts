@@ -29,6 +29,7 @@ export class Advanced {
   graficoAIM: any;
   sensogramaAIM: any;
 
+  /*
   public corEvento(comprimentoDeOnda) {
     this.comprimento_deOnda = comprimentoDeOnda.detail.value;
     this.cameraService.comp = comprimentoDeOnda.detail.value;
@@ -36,7 +37,7 @@ export class Advanced {
     this.tabsPage.cor(comprimentoDeOnda.detail.value);
 
   }
-
+*/
   async chartAIM() {
 
     var mainchart;

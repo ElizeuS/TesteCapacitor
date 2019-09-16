@@ -8,7 +8,6 @@ import { IonSegment, AlertController } from '@ionic/angular';
 import { isString } from "highcharts";
 
 
-
 @Component({
     selector: 'app-view',
     templateUrl: 'view.html',
@@ -295,9 +294,9 @@ export class View {
 
     }
 
-    public async corEvento(comprimentoDeOnda) {
-        if (comprimentoDeOnda === 781)
-            this.comprimento_deOnda = "comprimentoDeOnda.detail.value";
+    public  corEvento(comprimentoDeOnda) {
+        if (comprimentoDeOnda.detail.value == 781)
+            this.comprimento_deOnda = comprimentoDeOnda.detail.value;
         else
             this.comprimento_deOnda = comprimentoDeOnda.detail.value;
 
@@ -305,6 +304,7 @@ export class View {
         //console.log(comprimentoDeOnda.detail.value);
         this.tabsPage.cor(this.cameraService.comp);
         this.compri = this.tabsPage.comprimentoDeOn;
+        
     }
 
 

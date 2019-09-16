@@ -51,7 +51,7 @@ export class CameraService {
   private _pictureOpts: CameraPreviewPictureOptions = {
     width: 250,
     height: 250,
-    quality: 85 //0=max compression, 100=max quality
+    quality: 55 //0=max compression, 100=max quality
   };
 
   private _cameraPreviewOpts: CameraPreviewOptions = {
