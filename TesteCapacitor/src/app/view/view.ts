@@ -55,8 +55,6 @@ export class View {
                     text: "Reflexivity",
                     style: { "color": "#ffffff" },
                 },
-                max: 2,
-                min: -1
             },
             xAxis: {
                 title: {
@@ -213,12 +211,7 @@ export class View {
 
     }
 
-    /* changeChart(type) {
-         // this.charData = type.detail.value === 'sensogram' ? getHighChartData2 : this.graficoAIM;
-         const valorSegmento = type.detail.value;
- 
-     }
-     */
+
     ngDoCheck() {
         let teste = document.getElementById("card-color")
         let r = this.cameraService.r;
@@ -233,7 +226,7 @@ export class View {
 
         // setData(this.cameraService.indicesGraphic); 
 
-        this.minHunter = this.cameraService.minimoHunter;
+        this.minHunter = this.cameraService.minHunterX;
         this.largura = this.cameraService.largura;
         this.assimetria = this.cameraService.assimetria;
 
@@ -283,8 +276,6 @@ export class View {
         let aim = document.getElementById("containerAIM");
         aim.style.display = "none";
         senso.style.display = "block";
-
-
     }
 
     clear() {
@@ -294,7 +285,7 @@ export class View {
 
     }
 
-    public  corEvento(comprimentoDeOnda) {
+    public corEvento(comprimentoDeOnda) {
         if (comprimentoDeOnda.detail.value == 781)
             this.comprimento_deOnda = comprimentoDeOnda.detail.value;
         else
@@ -304,7 +295,7 @@ export class View {
         //console.log(comprimentoDeOnda.detail.value);
         this.tabsPage.cor(this.cameraService.comp);
         this.compri = this.tabsPage.comprimentoDeOn;
-        
+
     }
 
 
@@ -391,95 +382,95 @@ export class View {
     }
 
     //MÉTODO RESPONSÁVEL POR ALTERAR A POSIÇÃO DO CARD DA FONTE DE LUZ
-  async ligthCardPosition() {
-    const alert = await this.alertCtrl.create({
-      header: "Position of the Light Source",
-      inputs: [
-        {
-          name: "Left",
-          type: "radio",
-          label: "Left",
-          value: "left",
-          checked: true
-        },
-        {
-          name: "Right",
-          type: "radio",
-          label: "Right",
-          value: "right"
-        }
-      ],
-      buttons: [
-        {
-          text: "Cancel",
-          role: "cancel",
-          cssClass: "secondary",
-          handler: () => {
-            console.log("Confirm Cancel");
-          }
-        },
-        {
-          text: "Ok",
-          handler: data => {
-            if (data == "left") {
-              this.cardSize("left");
-            } else if (data == "right") {
-              this.cardSize("right");
-            }
+    async ligthCardPosition() {
+        const alert = await this.alertCtrl.create({
+            header: "Position of the Light Source",
+            inputs: [
+                {
+                    name: "Left",
+                    type: "radio",
+                    label: "Left",
+                    value: "left",
+                    checked: true
+                },
+                {
+                    name: "Right",
+                    type: "radio",
+                    label: "Right",
+                    value: "right"
+                }
+            ],
+            buttons: [
+                {
+                    text: "Cancel",
+                    role: "cancel",
+                    cssClass: "secondary",
+                    handler: () => {
+                        console.log("Confirm Cancel");
+                    }
+                },
+                {
+                    text: "Ok",
+                    handler: data => {
+                        if (data == "left") {
+                            this.cardSize("left");
+                        } else if (data == "right") {
+                            this.cardSize("right");
+                        }
 
-            console.log("Confirm Ok");
-          }
-        }
-      ]
-    });
+                        console.log("Confirm Ok");
+                    }
+                }
+            ]
+        });
 
-    await alert.present();
-  }
+        await alert.present();
+    }
 
-  //MÉTODO RESPONSÁVEL POR APLICAR AS MUDANÇAS DE TAMANHO D CARD DE FONTE DE LUZ
-  async cardSize(position: String) {
-    //console.log("A função está sendo chamada");
+    //MÉTODO RESPONSÁVEL POR APLICAR AS MUDANÇAS DE TAMANHO D CARD DE FONTE DE LUZ
+    async cardSize(position: String) {
+        //console.log("A função está sendo chamada");
 
-    let alert = await this.alertCtrl.create({
-      header: "Dimensions of the Light Source",
-      inputs: [
-        {
-          name: "height",
-          placeholder: "height: [100] base value"
-        },
-        {
-          name: "width",
-          placeholder: "width: [140] base value"
-        }
-      ],
-      buttons: [
-        {
-          text: "Cancel",
-          role: "Cancel"
-        },
-        {
-          text: "Save",
-          handler: data => {
-            let valorTamanho = document.getElementById("card-color");
-            let tAltura = data.height;
-            let tLargura = data.width;
-            valorTamanho.style.width = `${tLargura}px`;
-            valorTamanho.style.height = `${tAltura}px`;
+        let alert = await this.alertCtrl.create({
+            header: "Dimensions of the Light Source",
+            inputs: [
+                {
+                    name: "height",
+                    placeholder: "height: [100] base value"
+                },
+                {
+                    name: "width",
+                    placeholder: "width: [140] base value"
+                }
+            ],
+            buttons: [
+                {
+                    text: "Cancel",
+                    role: "Cancel"
+                },
+                {
+                    text: "Save",
+                    handler: data => {
+                        let valorTamanho = document.getElementById("card-color");
+                        let tAltura = data.height;
+                        let tLargura = data.width;
+                        valorTamanho.style.width = `${tLargura}px`;
+                        valorTamanho.style.height = `${tAltura}px`;
 
-            if (isString(position)) {
-              valorTamanho.style.cssFloat = String(position);
-              valorTamanho.style.paddingTop = "0px";
-            } else {
-              valorTamanho.style.cssFloat = "none";
-              valorTamanho.style.paddingTop = "0px";
-            }
-          }
-        }
-      ]
-    });
+                        if (isString(position)) {
+                            valorTamanho.style.cssFloat = String(position);
+                            valorTamanho.style.paddingTop = "0px";
+                        } else {
+                            valorTamanho.style.cssFloat = "none";
+                            valorTamanho.style.paddingTop = "0px";
+                        }
+                    }
+                }
+            ]
+        });
 
-    await alert.present();
-  }
+        await alert.present();
+    }
 
     clickHide() {
         let bar = document.getElementById("knob");

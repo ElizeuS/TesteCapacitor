@@ -8,8 +8,9 @@ import { median, average } from 'filters';
   providedIn: 'root'
 })
 export class CameraService {
+  [x: string]: any;
 
-  comp : any;
+  comp: any;
   r: any;
   g: any;
   b: any;
@@ -24,22 +25,22 @@ export class CameraService {
 
   arrayMin: [];
 
-  
+
   private _indicesGraphic = [];
   private _indicesMin = [];
   private _indicesAtuais = [];
   private _channel = 0; //variavel para o canal (R, G, B) (0, 1, 2)
-  
+  private _minHunterX;
   
 
   private _smoothinMode = 0; //Variável de seleção de suaviação 0 = nennhum, 1 = mediana, 2 = media
   private _windowsValue: 3; //Valor da janela de suavização
-  
+
 
   private _minimoHunter: any;
   private _assimetria: any;
   private _largura: any;
-  
+
   public constructor(private _cameraPreview: CameraPreview) {
     this.comp = 670;
     this._channel = 0; //Setando o canal inicial Verlelho (0)
@@ -49,9 +50,9 @@ export class CameraService {
 
   // picture options, opções das fotos tiradas
   private _pictureOpts: CameraPreviewPictureOptions = {
-    width: 250,
-    height: 250,
-    quality: 55 //0=max compression, 100=max quality
+    width: 400,
+    height: 400,
+    quality: 80 //0=max compression, 100=max quality
   };
 
   private _cameraPreviewOpts: CameraPreviewOptions = {
@@ -60,17 +61,18 @@ export class CameraService {
     width: 60,
     height: 60,
     tapPhoto: true,
+    camera: this._cameraPreview.CAMERA_DIRECTION.FRONT,
     previewDrag: true,
     toBack: false,
     //alpha: 1
   };
 
   async startCamera() { // inicia a camera
-   // console.log("Entrou na funcao");
+    // console.log("Entrou na funcao");
     this.picture = null;
+    this._cameraPreview.setColorEffect(this._cameraPreview.COLOR_EFFECT.MONO);
     this._cameraPreview.startCamera(this._cameraPreviewOpts).then(
       () => {
-        //alert("entrou" + res);
         this.takePicture();
         //this._firstImage = this._cameraPreview.setColorEffect('mono');
       },
@@ -85,12 +87,8 @@ export class CameraService {
     this._cameraPreview.takePicture(this._pictureOpts).then(
       (res) => {
         this.picture = 'data:image/jpeg;base64,' + res; // convertendo a imagem em data string jpeg
-
-       // alert("CHEGOOU! " + this.picture);
-        this.loadImage();
-        this.takePicture(); // chama recursivamente
-
-        //console.log(this.picture);
+        this.loadImage().then(() => this.takePicture()); //quando concluir o loadimage() inicia o takePicture()
+        // chama recursivamente
       },
       (err) => {
         console.log(err)
@@ -110,9 +108,13 @@ export class CameraService {
 
   async itemSelected(filter: Filter) {
     let img = filter.applyFilter(this._originalImg, this._outputImg);
-    this.getPointSpr(img);
-  
+    const response = await this.getPointSpr(img);
+    console.log(response);
+
+
   }
+
+
 
   async setupFilters() {
     this._filters.push(new GrayScaleFilter("Gray Scale"));
@@ -125,12 +127,12 @@ export class CameraService {
 
 
   //TERMINAR ESSAFUNÇÃO, VERIFICAR CANAL RGB PARA SELECIONAR A AMOSTRAGEM.
-  checkChannel(){
-    if(this.channel == 0){
+  checkChannel() {
+    if (this.channel == 0) {
 
-    }else if(this.channel == 1){
+    } else if (this.channel == 1) {
 
-    }else if(this.channel == 2){
+    } else if (this.channel == 2) {
 
     }
   }
@@ -151,6 +153,7 @@ export class CameraService {
 
       }
     }
+
     //Percorre o array para calcular a MÉDIA por COLUNA
     for (let i = 0; i < _soma.length; i++) {
       _media[i] = (_soma[i] / parseInt(image.getWidth()));
@@ -167,51 +170,29 @@ export class CameraService {
     for (let i = 0; i < _media.length; i++) {
       dadosAIM.push(_media[i] / this._currentIndicesDryCell[i]);
     }
-    
-  
+
+
     //PROCESSO QUE VERIFICA A OPÇÃO DE SUAVIZAÇÃO ESCOLHIDA E APLICA O MÉTODO
-    if (this._smoothinMode == 0){
+    if (this._smoothinMode == 0) {
       this._indicesGraphic = dadosAIM; //guarda os valores das imaqgem atual
-    } else if(this._smoothinMode == 1){
+    } else if (this._smoothinMode == 1) {
       this._indicesGraphic = median(dadosAIM, this.windowsValue);
-    } else if(this._smoothinMode == 2){
+    } else if (this._smoothinMode == 2) {
       this._indicesGraphic = average(dadosAIM, this.windowsValue);
     }
-    
-    
-      //this._indicesGraphic.push(dadosAIM);
 
-     // this._indicesGraphic = dadosAIM;
-
-      //alert(this._indicesGraphic);
-
-      //this._view.graficoAIM.series[0].setData(this._indicesGraphic);
-
-    //alert("DADOS " + dadosAIM);
-
-    /**
-     * O procedimento abaixo realiza a suavização por mediana,
-     * passando os valores e o parametro de pontos vizinhos.
-     **/
-    /* console.log(this.data);
-   
-     if (this.data == undefined) {
-         this.graficoAIM.series[0].setData(dadosAIM);
-     } else {
-         this.graficoAIM.series[0].setData(median(dadosAIM, this.data));
-     }
-
-
-   */
     /**
      * A função a seguir realiza a normalização dos valores de referência.
-     */
-    this.normalizacao(this._currentIndicesDryCell);
-
+    this.normalizacao(this._currentIndicesDryCell);*/
+    let minHunX;
     let min = 255.0;
     for (let i = 0; i < dadosAIM.length; i++) {
-      if (min > dadosAIM[i]) { min = dadosAIM[i]; }
+      if (min > dadosAIM[i]) {
+        min = dadosAIM[i];
+        minHunX = i;
+      }
     }
+    this._minHunterX = minHunX; //Pega os valores do minimo no eixo X
 
     let max = 0;
     for (let j = 0; j < dadosAIM.length; j++) {
@@ -219,7 +200,6 @@ export class CameraService {
         max = dadosAIM[j];
       }
     }
-
     let teta_medio = ((max + min) / 2);
 
     let aux = 0;
@@ -240,14 +220,15 @@ export class CameraService {
     this._largura = parseFloat("" + (valorCL - valorCR).toFixed(3));
     this._assimetria = parseFloat("" + (valorCL / valorCR).toFixed(3));
     this._minimoHunter = parseFloat("" + min.toFixed(3));
+  
 
     // this.chartSensorgrama.series[0].addPoint([min]);
-    this._indicesMin.push(this._minimoHunter);
+    this._indicesMin.push(this._minimoHunterX);
 
 
   }
 
-   normalizacao(dadosAIM: number[]) {
+  normalizacao(dadosAIM: number[]) {
     let min = 255.0;
     let max = 0;
     let dados = [];
@@ -261,7 +242,7 @@ export class CameraService {
     }
 
 
-   // console.log(dados + " DADOS NORMALIZAÇÃO");
+    // console.log(dados + " DADOS NORMALIZAÇÃO");
 
     //Descomente o codigo abaixo para apresentar no grafico
     //this.graficoAIM.series[1].setData(dados); //DESCOMENTAR
@@ -270,7 +251,7 @@ export class CameraService {
   }
 
   //Atualiza os valores de DryCell
-  dry(){
+  dry() {
     this._currentIndicesDryCell = this._indicesAtuais;
   }
 
@@ -348,4 +329,11 @@ export class CameraService {
   public set windowsValue(value: any) {
     this._windowsValue = value;
   }
+  public get minHunterX() {
+    return this._minHunterX;
+  }
+  public set minHunterX(value) {
+    this._minHunterX = value;
+  }
+
 }
