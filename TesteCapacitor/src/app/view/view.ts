@@ -6,6 +6,7 @@ import * as $ from "jquery";
 import { TabsPage } from '../tabs/tabs.page';
 import { IonSegment, AlertController } from '@ionic/angular';
 import { isString } from "highcharts";
+import { HtmlParser } from '@angular/compiler';
 
 
 @Component({
@@ -41,7 +42,7 @@ export class View {
             chart: {
                 type: 'scatter',
                 zoomType: 'xy',
-                width: 350,
+                width: screen.width,
                 height: 300,
                 backgroundColor: "black",
                 events: {
@@ -127,7 +128,12 @@ export class View {
                     lineColor: "blue", // cor do contorno do ponto
                     radius: 3
                 },
-            }]
+            }],
+            navigation: {
+                buttonOptions: {
+                    enabled: true
+                }
+            }
         });
     }
 
@@ -232,7 +238,7 @@ export class View {
 
         this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
         this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);
-        this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)) //plotando os valores de referência
+        this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
 
     }
 
@@ -281,8 +287,7 @@ export class View {
     clear() {
         //alert(this.cameraService.indicesMin);
         this.cameraService.indicesMin = []; //Apaga os valores do gráfico do sensograma
-        //alert(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)) 
-
+        //alert(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell));
     }
 
     public corEvento(comprimentoDeOnda) {
@@ -482,6 +487,10 @@ export class View {
             //$('ion-range').show()
         }
 
+    }
+
+    getCSV() {
+    
     }
 
 }

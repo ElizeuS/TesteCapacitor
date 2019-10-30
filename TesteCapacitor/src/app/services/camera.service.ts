@@ -30,7 +30,7 @@ export class CameraService {
   private _indicesMin = [];
   private _indicesAtuais = [];
   private _channel = 0; //variavel para o canal (R, G, B) (0, 1, 2)
-  private _minHunterX;
+  private _minHunterX: any;
   
 
   private _smoothinMode = 0; //Variável de seleção de suaviação 0 = nennhum, 1 = mediana, 2 = media
@@ -220,7 +220,8 @@ export class CameraService {
     this._largura = parseFloat("" + (valorCL - valorCR).toFixed(3));
     this._assimetria = parseFloat("" + (valorCL / valorCR).toFixed(3));
     this._minimoHunter = parseFloat("" + min.toFixed(3));
-  
+
+    this._minimoHunterX = parseFloat("" + minHunX.toFixed(1));
 
     // this.chartSensorgrama.series[0].addPoint([min]);
     this._indicesMin.push(this._minimoHunterX);
