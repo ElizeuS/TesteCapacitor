@@ -22,6 +22,7 @@ import {CameraService} from '../../src/app/services/camera.service';
     CameraPreview,
     CameraService,
     SplashScreen,
+    
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

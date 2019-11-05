@@ -6,7 +6,6 @@ import * as $ from "jquery";
 import { TabsPage } from '../tabs/tabs.page';
 import { IonSegment, AlertController } from '@ionic/angular';
 import { isString } from "highcharts";
-import { HtmlParser } from '@angular/compiler';
 
 
 @Component({
