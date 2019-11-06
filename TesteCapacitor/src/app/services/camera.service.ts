@@ -31,7 +31,7 @@ export class CameraService {
   private _indicesAtuais = [];
   private _channel = 0; //variavel para o canal (R, G, B) (0, 1, 2)
   private _minHunterX: any;
-  
+
 
   private _smoothinMode = 0; //Variável de seleção de suaviação 0 = nennhum, 1 = mediana, 2 = media
   private _windowsValue: 3; //Valor da janela de suavização
@@ -46,13 +46,14 @@ export class CameraService {
     this._channel = 0; //Setando o canal inicial Verlelho (0)
     this.windowsValue = 3;
     this.smoothinMode = 0;
+
   }
 
   // picture options, opções das fotos tiradas
   private _pictureOpts: CameraPreviewPictureOptions = {
-    width: 400,
-    height: 400,
-    quality: 80 //0=max compression, 100=max quality
+    width: 200,
+    height: 200,
+    quality: 40 //0=max compression, 100=max quality
   };
 
   private _cameraPreviewOpts: CameraPreviewOptions = {
@@ -61,7 +62,7 @@ export class CameraService {
     width: 60,
     height: 60,
     tapPhoto: true,
-    camera: this._cameraPreview.CAMERA_DIRECTION.FRONT,
+    //camera: this._cameraPreview.CAMERA_DIRECTION.FRONT,
     previewDrag: true,
     toBack: false,
     //alpha: 1
@@ -108,10 +109,9 @@ export class CameraService {
 
   async itemSelected(filter: Filter) {
     let img = filter.applyFilter(this._originalImg, this._outputImg);
-    const response = await this.getPointSpr(img);
-    console.log(response);
-
-
+    //const response = await 
+    this.getPointSpr(img);
+    // console.log(response);
   }
 
 

@@ -19,11 +19,11 @@
 <ion-content>
     <div id="containerAIM"></div>
     <div id="containerSensogramaAIM"></div>
-    <ion-segment bottom color="Primary" mode="md">
+    <ion-segment [(ngModel)]="segment" bottom color="Primary" mode="md">
         <ion-segment-button value="aim" (click)="aimShow()">
             <ion-label class="texts">SPR</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="sensogram" (click)="sensogramaShow()">
+        <ion-segment-button value="sensogram" (click)="aimShow()">
             <ion-label class="texts">Sensogram</ion-label>
         </ion-segment-button>
     </ion-segment>
@@ -43,18 +43,6 @@
 </ion-content>
 <footer>
     <ion-grid>
-        <ion-row>
-            <ion-col></ion-col>
-            <ion-col></ion-col>
-            <ion-col></ion-col>
-            <ion-col></ion-col>
-            <ion-col></ion-col>
-            <ion-col>
-                <ion-fab-button (click)="getCSV()" color="light" size="small">
-                    CSV
-                </ion-fab-button>
-            </ion-col>
-        </ion-row>
         <ion-row>
             <ion-col>
                 <ion-fab>

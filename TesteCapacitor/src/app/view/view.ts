@@ -31,6 +31,7 @@ export class View {
         console.log(this.cameraService.comp);
         //this.graficoAIM.series[0].setData(this.cameraService._indicesGraphic); 
         //this.tabsPage.setColor(255, 0, 0);
+        
     }
 
     async chartAIM() {
@@ -216,7 +217,6 @@ export class View {
 
     }
 
-
     ngDoCheck() {
         let teste = document.getElementById("card-color")
         let r = this.cameraService.r;
@@ -236,9 +236,17 @@ export class View {
         this.assimetria = this.cameraService.assimetria;
 
         this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
-        this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);
+    
         this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
 
+    }
+
+    ngAfterViewChecked(): void {
+        //Called after every check of the component's view. Applies to components only.
+        //Add 'implements AfterViewChecked' to the class.
+        this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);
+
+        
     }
 
     ngOnInit() {
@@ -253,35 +261,34 @@ export class View {
         this.cameraService.verifyHideShowCam();
     }
 
-
-
-    /*clickHide() {
-      //let bar = document.getElementById("ligth-bar");
-      $('#card-top2').click(function () {
-          $('ion-range', 'p').hide();
-      });
-  }*/
-
     calibraDryCell() {
         this.cameraService.dry();
     }
 
 
-    //aimShow() Exibe a div do gráfico AIM e oculta a div do gráfico Sensograma
-    aimShow() {
+    //aimShow() Exibe a div do gráfico AIM e oculta a div do gráfico Sensograma e o processo contrário
+    async aimShow() {
+        console.log(this.segment);
         let sensog = document.getElementById("containerSensogramaAIM");
         let aims = document.getElementById("containerAIM");
-        aims.style.display = "block";
-        sensog.style.display = "none";
+
+        if (String(this.segment) == "aim") {
+            aims.style.display = "block";
+            sensog.style.display = "none";
+        } else if(String(this.segment) == "sensogram"){
+            aims.style.display = "none";
+            sensog.style.display = "block";
+        }
+
 
     }
     //Faz o inverso da aimShow()
-    sensogramaShow() {
+    /*sensogramaShow() {
         let senso = document.getElementById("containerSensogramaAIM");
         let aim = document.getElementById("containerAIM");
         aim.style.display = "none";
         senso.style.display = "block";
-    }
+    }*/
 
     clear() {
         //alert(this.cameraService.indicesMin);
@@ -486,10 +493,6 @@ export class View {
             //$('ion-range').show()
         }
 
-    }
-
-    getCSV() {
-    
     }
 
 }
