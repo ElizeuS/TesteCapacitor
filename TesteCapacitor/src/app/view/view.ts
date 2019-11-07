@@ -6,6 +6,7 @@ import * as $ from "jquery";
 import { TabsPage } from '../tabs/tabs.page';
 import { IonSegment, AlertController } from '@ionic/angular';
 import { isString } from "highcharts";
+import { SensogramaService } from '../services/sensograma.service';
 
 
 @Component({
@@ -25,7 +26,9 @@ export class View {
 
 
     @ViewChild(IonSegment) segment: IonSegment;
-    public constructor(private cameraService: CameraService, public tabsPage: TabsPage, private alertCtrl: AlertController) {
+    public constructor(private cameraService: CameraService, public tabsPage: TabsPage,
+         private alertCtrl: AlertController,
+         private sensogramaService: SensogramaService) {
         //this.charData = getHighChartData;
         this.compri = 670;
         console.log(this.cameraService.comp);
@@ -231,7 +234,7 @@ export class View {
 
         // setData(this.cameraService.indicesGraphic); 
 
-        this.minHunter = this.cameraService.minHunterX;
+        this.minHunter = this.sensogramaService.minHunterX;
         this.largura = this.cameraService.largura;
         this.assimetria = this.cameraService.assimetria;
 
@@ -244,7 +247,8 @@ export class View {
     ngAfterViewChecked(): void {
         //Called after every check of the component's view. Applies to components only.
         //Add 'implements AfterViewChecked' to the class.
-        this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);
+        //this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);
+        this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinHunter);
 
         
     }
@@ -292,7 +296,7 @@ export class View {
 
     clear() {
         //alert(this.cameraService.indicesMin);
-        this.cameraService.indicesMin = []; //Apaga os valores do gráfico do sensograma
+        this.sensogramaService.indicesMinHunter = []; //Apaga os valores do gráfico do sensograma
         //alert(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell));
     }
 

@@ -3,6 +3,7 @@ import { MarvinImage } from 'marvin';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions } from '@ionic-native/camera-preview/ngx'
 import { Filter, GrayScaleFilter } from '../models/filter';
 import { median, average } from 'filters';
+import { SensogramaService } from './sensograma.service';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +42,7 @@ export class CameraService {
   private _assimetria: any;
   private _largura: any;
 
-  public constructor(private _cameraPreview: CameraPreview) {
+  public constructor(private _cameraPreview: CameraPreview, private sensogramaService: SensogramaService) {
     this.comp = 670;
     this._channel = 0; //Setando o canal inicial Verlelho (0)
     this.windowsValue = 3;
@@ -181,10 +182,11 @@ export class CameraService {
       this._indicesGraphic = average(dadosAIM, this.windowsValue);
     }
 
+    this.sensogramaService.minimoHunter(dadosAIM);
     /**
      * A função a seguir realiza a normalização dos valores de referência.
     this.normalizacao(this._currentIndicesDryCell);*/
-    let minHunX;
+    /*let minHunX;
     let min = 255.0;
     for (let i = 0; i < dadosAIM.length; i++) {
       if (min > dadosAIM[i]) {
@@ -194,13 +196,15 @@ export class CameraService {
     }
     this._minHunterX = minHunX; //Pega os valores do minimo no eixo X
 
+    */
+
     let max = 0;
     for (let j = 0; j < dadosAIM.length; j++) {
       if (max < dadosAIM[j]) {
         max = dadosAIM[j];
       }
     }
-    let teta_medio = ((max + min) / 2);
+    let teta_medio = ((max + this.sensogramaService.minHunterX) / 2);
 
     let aux = 0;
     let valorCL = 0;
@@ -219,12 +223,11 @@ export class CameraService {
     //Converte para Float e define as casas decimais das métricas
     this._largura = parseFloat("" + (valorCL - valorCR).toFixed(3));
     this._assimetria = parseFloat("" + (valorCL / valorCR).toFixed(3));
-    this._minimoHunter = parseFloat("" + min.toFixed(3));
-
-    this._minimoHunterX = parseFloat("" + minHunX.toFixed(1));
+    //this._minimoHunter = parseFloat("" + min.toFixed(3));
+    //this._minimoHunterX = parseFloat("" + minHunX.toFixed(1));
 
     // this.chartSensorgrama.series[0].addPoint([min]);
-    this._indicesMin.push(this._minimoHunterX);
+    //this._indicesMin.push(this._minimoHunterX);
 
 
   }
