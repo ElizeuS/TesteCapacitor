@@ -26,12 +26,15 @@ export class CameraService {
 
   arrayMin: [];
 
-
+  private _choiseMinCS: any;
+  
   private _indicesGraphic = [];
   private _indicesMin = [];
   private _indicesAtuais = [];
   private _channel = 0; //variavel para o canal (R, G, B) (0, 1, 2)
   private _minHunterX: any;
+  private _dadosAIM = [];
+  
 
 
   private _smoothinMode = 0; //Variável de seleção de suaviação 0 = nennhum, 1 = mediana, 2 = media
@@ -181,8 +184,13 @@ export class CameraService {
     } else if (this._smoothinMode == 2) {
       this._indicesGraphic = average(dadosAIM, this.windowsValue);
     }
+    this._dadosAIM = dadosAIM;
 
-    this.sensogramaService.minimoHunter(dadosAIM);
+    this.sensogramaService.calculaMin(this._choiseMinCS, this.dadosAIM);
+    //this.sensogramaService.minimoHunter(dadosAIM);
+    //this.sensogramaService.minimoPolinomial(dadosAIM);
+
+
     /**
      * A função a seguir realiza a normalização dos valores de referência.
     this.normalizacao(this._currentIndicesDryCell);*/
@@ -204,7 +212,7 @@ export class CameraService {
         max = dadosAIM[j];
       }
     }
-    let teta_medio = ((max + this.sensogramaService.minHunterX) / 2);
+    let teta_medio = ((max + parseFloat(this.sensogramaService.minimo)) / 2);
 
     let aux = 0;
     let valorCL = 0;
@@ -338,6 +346,18 @@ export class CameraService {
   }
   public set minHunterX(value) {
     this._minHunterX = value;
+  }
+  public get dadosAIM() {
+    return this._dadosAIM;
+  }
+  public set dadosAIM(value) {
+    this._dadosAIM = value;
+  }
+  public get choiseMinCS(): any {
+    return this._choiseMinCS;
+  }
+  public set choiseMinCS(value: any) {
+    this._choiseMinCS = value;
   }
 
 }

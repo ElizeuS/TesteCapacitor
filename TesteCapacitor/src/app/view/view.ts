@@ -23,6 +23,7 @@ export class View {
     assimetria: any;
     comprimento_deOnda: any;
     compri: any;
+    choiseMin = 1;
 
 
     @ViewChild(IonSegment) segment: IonSegment;
@@ -234,7 +235,7 @@ export class View {
 
         // setData(this.cameraService.indicesGraphic); 
 
-        this.minHunter = this.sensogramaService.minHunterX;
+        this.minHunter = this.sensogramaService.minimo;
         this.largura = this.cameraService.largura;
         this.assimetria = this.cameraService.assimetria;
 
@@ -248,8 +249,8 @@ export class View {
         //Called after every check of the component's view. Applies to components only.
         //Add 'implements AfterViewChecked' to the class.
         //this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);
-        this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinHunter);
-
+        this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimo);
+        
         
     }
 
@@ -296,7 +297,7 @@ export class View {
 
     clear() {
         //alert(this.cameraService.indicesMin);
-        this.sensogramaService.indicesMinHunter = []; //Apaga os valores do gráfico do sensograma
+        this.sensogramaService.indicesMinimo = []; //Apaga os valores do gráfico do sensograma
         //alert(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell));
     }
 
@@ -313,6 +314,7 @@ export class View {
 
     }
 
+   
 
     async smoothingMethod() {
         const alert = await this.alertCtrl.create({
@@ -394,6 +396,66 @@ export class View {
             ]
         });
         await prompt.present();
+    }
+
+    async minMethod() {
+        const alert = await this.alertCtrl.create({
+            header: "Choose the smoothing method",
+            inputs: [
+                {
+                    name: "Hunter",
+                    type: "radio",
+                    label: "Min Hunter",
+                    value: "hunter",
+                    checked: true
+                },
+                {
+                    name: "Polinomyal",
+                    type: "radio",
+                    label: "Min Polynomyal",
+                    value: "polinomyal"
+                },
+                {
+                    name: "Centroid",
+                    type: "radio",
+                    label: "Min Centroid",
+                    value: "centroid"
+                }
+            ],
+            buttons: [
+                {
+                    text: "Cancel",
+                    role: "cancel",
+                    cssClass: "secondary",
+                    handler: () => {
+                        console.log("Confirm Cancel");
+                    }
+                },
+                {
+                    text: "Ok",
+                    handler: data => {
+                        //this.testRadioOpen = false;
+
+                        if (data == "hunter") {
+                            this.cameraService.choiseMinCS = 1;
+
+                        } else if (data == "polinomyal") {
+                            this.cameraService.choiseMinCS = 2;
+                        }
+                        else if(data == "centroid"){
+                            this.cameraService.choiseMinCS = 3;
+                        }
+                        else{
+                            this.cameraService.choiseMinCS = 1;
+                        }
+                        console.log(data);
+                        console.log("Confirm Ok");
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
     }
 
     //MÉTODO RESPONSÁVEL POR ALTERAR A POSIÇÃO DO CARD DA FONTE DE LUZ
