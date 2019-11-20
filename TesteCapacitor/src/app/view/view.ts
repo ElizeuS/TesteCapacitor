@@ -1,7 +1,6 @@
 import { Component, SimpleChange, ViewChild } from '@angular/core';
 import { CameraService } from '../services/camera.service';
 import * as HighCharts from 'highcharts';
-//import { getHighChartData, getHighChartData2 } from '../data/Chart-fake';
 import * as $ from "jquery";
 import { TabsPage } from '../tabs/tabs.page';
 import { IonSegment, AlertController } from '@ionic/angular';
@@ -239,13 +238,14 @@ export class View {
         this.largura = this.cameraService.largura;
         this.assimetria = this.cameraService.assimetria;
 
+        this.graficoAIM.xAxis.length = this.cameraService.indicesGraphic.length; //cnfigura o tamanho do eixo x do grafico
         this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
     
         this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
 
     }
 
-    ngAfterViewChecked(): void {
+    ngAfterViewChecked(){
         //Called after every check of the component's view. Applies to components only.
         //Add 'implements AfterViewChecked' to the class.
         //this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);

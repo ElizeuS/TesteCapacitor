@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MarvinImage } from 'marvin';
-import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions } from '@ionic-native/camera-preview/ngx'
+import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@ionic-native/camera-preview/ngx'
 import { Filter, GrayScaleFilter } from '../models/filter';
 import { median, average } from 'filters';
 import { SensogramaService } from './sensograma.service';
@@ -27,14 +27,14 @@ export class CameraService {
   arrayMin: [];
 
   private _choiseMinCS: any;
-  
+
   private _indicesGraphic = [];
   private _indicesMin = [];
   private _indicesAtuais = [];
   private _channel = 0; //variavel para o canal (R, G, B) (0, 1, 2)
   private _minHunterX: any;
   private _dadosAIM = [];
-  
+
 
 
   private _smoothinMode = 0; //Variável de seleção de suaviação 0 = nennhum, 1 = mediana, 2 = media
@@ -55,16 +55,16 @@ export class CameraService {
 
   // picture options, opções das fotos tiradas
   private _pictureOpts: CameraPreviewPictureOptions = {
-    width: 200,
-    height: 200,
-    quality: 40 //0=max compression, 100=max quality
+    width: window.screen.width,
+    height: window.screen.height,
+    quality: 100 //0=max compression, 100=max quality
   };
 
   private _cameraPreviewOpts: CameraPreviewOptions = {
     x: 200, //Posição em que a câmera vai aparecer
     y: 200, //Posição em que a câmera vai aparecer
-    width: 60,
-    height: 60,
+    width: 100,
+    height: 100,
     tapPhoto: true,
     //camera: this._cameraPreview.CAMERA_DIRECTION.FRONT,
     previewDrag: true,
@@ -75,7 +75,7 @@ export class CameraService {
   async startCamera() { // inicia a camera
     // console.log("Entrou na funcao");
     this.picture = null;
-    this._cameraPreview.setColorEffect(this._cameraPreview.COLOR_EFFECT.MONO);
+    //this._cameraPreview.setColorEffect(this._cameraPreview.COLOR_EFFECT.MONO);
     this._cameraPreview.startCamera(this._cameraPreviewOpts).then(
       () => {
         this.takePicture();
@@ -146,21 +146,27 @@ export class CameraService {
     let _media = [];
 
     //Percorre o array para pegar as somas dos valores por coluna
-    for (let i = 0; i < image.getHeight(); i++) {
-      for (var j = 0; j < image.getWidth(); j++) {
+    for (let i = 0; i < image.getWidth(); i++) {
+      for (let j = 0; j < image.getHeight(); j++) {
 
-        if (_soma[j] == null) {
-          _soma.push(image.getIntComponent0(i, j))
+        if (_soma[i] == null) {
+          _soma.push(image.getIntComponent0(i, j));
         } else {
-          _soma[j] = _soma[j] + image.getIntComponent0(i, j);
+          //_soma[j] = _soma[j] + image.getIntComponent0(i, j);
+          _soma[i] = _soma[i] + image.getIntComponent0(i, j);
         }
 
       }
     }
 
+
+    //alert(this._cameraPreview.getSupportedPictureSizes());
+    //alert("Altura : " + image.getHeight() + " Largura: " + image.getWidth());
+
     //Percorre o array para calcular a MÉDIA por COLUNA
     for (let i = 0; i < _soma.length; i++) {
-      _media[i] = (_soma[i] / parseInt(image.getWidth()));
+      _media[i] = (_soma[i] / (parseInt(image.getWidth() + 1)));
+      //alterei de getWidth() pra pois a lógica está errada getHeight()
 
     }
 

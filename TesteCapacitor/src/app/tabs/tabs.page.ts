@@ -17,7 +17,6 @@ export class TabsPage {
   
   ngOnInit() {
     this.cameraService.startCamera();
-    //this.cameraService.takePicture();
     
   }
 
