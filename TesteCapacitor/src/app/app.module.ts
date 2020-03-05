@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { CameraPreview } from '@ionic-native/camera-preview/ngx';
 
 import {CameraService} from '../../src/app/services/camera.service';
-
+import { File } from '@ionic-native/file/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,6 +22,7 @@ import {CameraService} from '../../src/app/services/camera.service';
     CameraPreview,
     CameraService,
     SplashScreen,
+    File,
     
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

@@ -20,6 +20,7 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="orientation" value="portrait" />
     <preference name="SplashScreenDelay" value="3000" />
+    <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <platform name="android">
         <preference name="loadUrlTimeoutValue" value="700000" />
         <allow-intent href="market:*" />
@@ -43,6 +44,7 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
     <platform name="ios">
+        <preference name="iosPersistentFileLocation" value="Compatibility" />
         <preference name="loadUrlTimeoutValue" value="700000" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />

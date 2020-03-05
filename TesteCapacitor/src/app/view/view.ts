@@ -3,10 +3,11 @@ import { CameraService } from '../services/camera.service';
 import * as HighCharts from 'highcharts';
 import * as $ from "jquery";
 import { TabsPage } from '../tabs/tabs.page';
-import { IonSegment, AlertController } from '@ionic/angular';
+import { IonSegment, AlertController, Platform } from '@ionic/angular';
 import { isString } from "highcharts";
 import { SensogramaService } from '../services/sensograma.service';
 
+import { File } from '@ionic-native/file/ngx';
 
 @Component({
     selector: 'app-view',
@@ -23,19 +24,67 @@ export class View {
     comprimento_deOnda: any;
     compri: any;
     choiseMin = 1;
+    private promise: Promise<string>;
+
+    private stringToWrite: string;
+
+    private blob: Blob;
 
 
     @ViewChild(IonSegment) segment: IonSegment;
-    public constructor(private cameraService: CameraService, public tabsPage: TabsPage,
-         private alertCtrl: AlertController,
-         private sensogramaService: SensogramaService) {
+    public constructor(private platform: Platform, private cameraService: CameraService, public tabsPage: TabsPage,
+        private alertCtrl: AlertController,
+        private sensogramaService: SensogramaService,
+        private file: File) {
         //this.charData = getHighChartData;
         this.compri = 670;
         console.log(this.cameraService.comp);
+
         //this.graficoAIM.series[0].setData(this.cameraService._indicesGraphic); 
         //this.tabsPage.setColor(255, 0, 0);
-        
+
+        this.createFile();
+
+
+
     }
+
+    /*
+    Função para criar um arquivo em um determinado diretório.
+    */
+    createFile() {
+
+        this.file.createFile(this.file.externalDataDirectory, 'filename.txt', true);
+
+    }
+
+    async readFile() {
+
+        this.promise = this.file.readAsText(this.file.externalDataDirectory, 'filename.txt');
+
+        await this.promise.then(value => {
+
+            console.log(value);
+
+        });
+
+    }
+
+    /**
+     * Função para escrever em um arquivo denominado de filename.txt,
+     * Esse arquivo é salvo na pasta file do diretorio da aplicação denominado de 'files'
+     * o diretorio é /storage/Android/data/io.ionic/started/files/filename.txt.
+     */
+    writeFile(something:any) {
+
+        this.stringToWrite = "I learned this from Medium";
+        let a: any = [11, 2, 3];
+        this.blob = new Blob(something);
+
+        this.file.writeFile(this.file.externalDataDirectory, 'filename.txt', this.blob, { replace: true, append: false });
+
+    }
+
 
     async chartAIM() {
 
@@ -146,7 +195,7 @@ export class View {
                 type: 'spline',
                 marginRight: 5,
                 zoomType: 'xy',
-                width: 350,
+                width: screen.width,
                 height: 300,
                 backgroundColor: 'black',
                 events: {
@@ -240,18 +289,18 @@ export class View {
 
         this.graficoAIM.xAxis.length = this.cameraService.indicesGraphic.length; //cnfigura o tamanho do eixo x do grafico
         this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
-    
-        this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
 
+        this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
+        
     }
 
-    ngAfterViewChecked(){
+    ngAfterViewChecked() {
         //Called after every check of the component's view. Applies to components only.
         //Add 'implements AfterViewChecked' to the class.
         //this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);
         this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimo);
-        
-        
+
+
     }
 
     ngOnInit() {
@@ -268,6 +317,7 @@ export class View {
 
     calibraDryCell() {
         this.cameraService.dry();
+        this.saveMinValues(this.sensogramaService.indicesMinimo);
     }
 
 
@@ -280,7 +330,7 @@ export class View {
         if (String(this.segment) == "aim") {
             aims.style.display = "block";
             sensog.style.display = "none";
-        } else if(String(this.segment) == "sensogram"){
+        } else if (String(this.segment) == "sensogram") {
             aims.style.display = "none";
             sensog.style.display = "block";
         }
@@ -314,7 +364,7 @@ export class View {
 
     }
 
-   
+
 
     async smoothingMethod() {
         const alert = await this.alertCtrl.create({
@@ -442,10 +492,10 @@ export class View {
                         } else if (data == "polinomyal") {
                             this.cameraService.choiseMinCS = 2;
                         }
-                        else if(data == "centroid"){
+                        else if (data == "centroid") {
                             this.cameraService.choiseMinCS = 3;
                         }
-                        else{
+                        else {
                             this.cameraService.choiseMinCS = 1;
                         }
                         console.log(data);
@@ -559,6 +609,19 @@ export class View {
             //$('ion-range').show()
         }
 
+    }
+
+    breakText(numbers: []) {
+        let valuesWithBreak = [];
+        for (let i = 0; i <= numbers.length; i++) {
+            valuesWithBreak[i] = numbers[i] + "\n";
+        }
+        return valuesWithBreak;
+    }
+
+    saveMinValues(values:any){
+        let btValues = this.breakText(values);
+        this.writeFile(btValues);
     }
 
 }

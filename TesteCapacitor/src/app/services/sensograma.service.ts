@@ -21,7 +21,8 @@ export class SensogramaService {
     } else if(choise == 2){
       this.minimoPolinomial(dadosAIM);
     } else if(choise == 3){
-
+      //IMPLEMENTAR O MÉTODO DO CENTROID
+      this.minimoHunter(dadosAIM); //E APAGAR ISTO
     } else{
       this.minimoHunter(dadosAIM);
     }
