@@ -1,7 +1,7 @@
-<script src="https://code.highcharts.com/highcharts.js"></script>
+<!-- <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
+<script src="https://code.highcharts.com/modules/offline-exporting.js"></script> -->
 <ion-header class="ion-header">
        
     <ion-card class="card-top2">
@@ -68,9 +68,15 @@
                     <ion-icon name="md-color-filter"></ion-icon>
                 </ion-fab-button>
             </ion-col>
+        
             <ion-col>
                 <ion-fab-button id="advancedMode2" color="light" size="small" (click)="hideShowCam()">
                     <ion-icon name="camera"></ion-icon>
+                </ion-fab-button>
+            </ion-col>
+            <ion-col>
+                <ion-fab-button color="light" size="small" (click)=" downloadFiles()">
+                    <ion-icon name="download"></ion-icon>
                 </ion-fab-button>
             </ion-col>
             <ion-col>
@@ -79,6 +85,7 @@
             <ion-col>
                 <ion-fab-button color="light" size="small" (click)="clear()">Clear</ion-fab-button>
             </ion-col>
+           
         </ion-row>
     </ion-grid>
 </footer>

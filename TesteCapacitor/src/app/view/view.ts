@@ -9,6 +9,8 @@ import { SensogramaService } from '../services/sensograma.service';
 
 import { File } from '@ionic-native/file/ngx';
 
+
+
 @Component({
     selector: 'app-view',
     templateUrl: 'view.html',
@@ -39,7 +41,6 @@ export class View {
         //this.charData = getHighChartData;
         this.compri = 670;
         console.log(this.cameraService.comp);
-
         //this.graficoAIM.series[0].setData(this.cameraService._indicesGraphic); 
         //this.tabsPage.setColor(255, 0, 0);
 
@@ -75,13 +76,10 @@ export class View {
      * Esse arquivo é salvo na pasta file do diretorio da aplicação denominado de 'files'
      * o diretorio é /storage/Android/data/io.ionic/started/files/filename.txt.
      */
-    writeFile(something:any) {
-
-        this.stringToWrite = "I learned this from Medium";
-        let a: any = [11, 2, 3];
+    writeFile(something:any, filename:string) {
         this.blob = new Blob(something);
 
-        this.file.writeFile(this.file.externalDataDirectory, 'filename.txt', this.blob, { replace: true, append: false });
+        this.file.writeFile(this.file.externalDataDirectory, filename+".txt", this.blob, { replace: true, append: false });
 
     }
 
@@ -281,7 +279,7 @@ export class View {
         //this.sensogramaAIM.series[0].setData(this.cameraService.minimoHunter);//TESTANDO
         // getHighChartData.series[0].
 
-        // setData(this.cameraService.indicesGraphic); 
+        // setData(this.cameraService.indicesGraphic); #DEFASADO
 
         this.minHunter = this.sensogramaService.minimo;
         this.largura = this.cameraService.largura;
@@ -317,7 +315,7 @@ export class View {
 
     calibraDryCell() {
         this.cameraService.dry();
-        this.saveMinValues(this.sensogramaService.indicesMinimo);
+        
     }
 
 
@@ -619,11 +617,37 @@ export class View {
         return valuesWithBreak;
     }
 
-    saveMinValues(values:any){
+    saveMinValues(values:any, filename:string){
         let btValues = this.breakText(values);
-        this.writeFile(btValues);
+        this.writeFile(btValues, filename);
     }
 
+    saveDryCellIndices(values:any, filename:string){
+        let btValues = this.breakText(values);
+        this.writeFile(btValues, filename);
+    }
+
+    saveAimIndices(values:any, filename:string){
+        let btValues = this.breakText(values);
+        this.writeFile(btValues, filename);
+    }
+
+    downloadFiles(){
+        let currentdate = new Date();
+        let actualyTime = currentdate.getDate() + "-"
+                + (currentdate.getMonth()+1)  + "-" 
+                + currentdate.getFullYear() + "-"  
+                + currentdate.getHours() + "-"  
+                + currentdate.getMinutes() + "-" 
+                + currentdate.getSeconds();
+    
+    this.saveMinValues(this.sensogramaService.indicesMinimo, "minValues_"+actualyTime);
+    this.saveDryCellIndices(this.cameraService._currentIndicesDryCell, "dryCell_"+actualyTime);
+    this.saveAimIndices(this.cameraService.indicesGraphic, "indicesAIM_"+actualyTime);
+    
+    }
+
+  
 }
 
 
