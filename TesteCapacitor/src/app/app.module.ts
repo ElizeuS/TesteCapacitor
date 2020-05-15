@@ -12,6 +12,7 @@ import { CameraPreview } from '@ionic-native/camera-preview/ngx';
 
 import {CameraService} from '../../src/app/services/camera.service';
 import { File } from '@ionic-native/file/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +24,7 @@ import { File } from '@ionic-native/file/ngx';
     CameraService,
     SplashScreen,
     File,
+    Geolocation,
     
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

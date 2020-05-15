@@ -45,6 +45,11 @@ export class CameraService {
   private _assimetria: any;
   private _largura: any;
 
+  //Arrays para armazenar as séries de assimetria e largura
+  private _indicesAssimetry = [];
+  private _indicesWidth = [];
+ 
+
   public constructor(private _cameraPreview: CameraPreview, private sensogramaService: SensogramaService) {
     this.comp = 670;
     this._channel = 0; //Setando o canal inicial Verlelho (0)
@@ -57,7 +62,7 @@ export class CameraService {
   private _pictureOpts: CameraPreviewPictureOptions = {
     width: window.screen.width,
     height: window.screen.height,
-    quality: 100 //0=max compression, 100=max quality
+    quality: 70 //0=max compression, 100=max quality
   };
 
   private _cameraPreviewOpts: CameraPreviewOptions = {
@@ -84,6 +89,10 @@ export class CameraService {
       (err) => {
         console.log(err)
       });
+  }
+
+  async stopCamera(){
+    this.cameraPreview.stopCamera();
   }
 
   async takePicture() {
@@ -237,6 +246,10 @@ export class CameraService {
     //Converte para Float e define as casas decimais das métricas
     this._largura = parseFloat("" + (valorCL - valorCR).toFixed(3));
     this._assimetria = parseFloat("" + (valorCL / valorCR).toFixed(3));
+
+
+    this._indicesAssimetry.push(this._assimetria);
+    this._indicesWidth.push(this._largura);
     //this._minimoHunter = parseFloat("" + min.toFixed(3));
     //this._minimoHunterX = parseFloat("" + minHunX.toFixed(1));
 
@@ -364,6 +377,21 @@ export class CameraService {
   }
   public set choiseMinCS(value: any) {
     this._choiseMinCS = value;
+  }
+
+   
+  public get indicesAssimetry() {
+    return this._indicesAssimetry;
+  }
+  public set indicesAssimetry(value) {
+    this._indicesAssimetry = value;
+  }
+  
+  public get indicesWidth() {
+    return this._indicesWidth;
+  }
+  public set indicesWidth(value) {
+    this._indicesWidth = value;
   }
 
 }

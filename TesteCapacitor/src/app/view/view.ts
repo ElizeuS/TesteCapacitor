@@ -1,6 +1,6 @@
 import { Component, SimpleChange, ViewChild } from '@angular/core';
 import { CameraService } from '../services/camera.service';
-import * as HighCharts from 'highcharts';
+import * as Highcharts from 'highcharts';
 import * as $ from "jquery";
 import { TabsPage } from '../tabs/tabs.page';
 import { IonSegment, AlertController, Platform } from '@ionic/angular';
@@ -8,6 +8,9 @@ import { isString } from "highcharts";
 import { SensogramaService } from '../services/sensograma.service';
 
 import { File } from '@ionic-native/file/ngx';
+
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+
 
 
 
@@ -31,22 +34,29 @@ export class View {
     private stringToWrite: string;
 
     private blob: Blob;
-
+    longitude: string;
+    latitude: string;
 
     @ViewChild(IonSegment) segment: IonSegment;
     public constructor(private platform: Platform, private cameraService: CameraService, public tabsPage: TabsPage,
         private alertCtrl: AlertController,
         private sensogramaService: SensogramaService,
-        private file: File) {
+        private file: File,
+        private geolocation: Geolocation) {
         //this.charData = getHighChartData;
         this.compri = 670;
         console.log(this.cameraService.comp);
         //this.graficoAIM.series[0].setData(this.cameraService._indicesGraphic); 
         //this.tabsPage.setColor(255, 0, 0);
 
-        this.createFile();
-
-
+        this.geolocation.getCurrentPosition().then((resp) => {
+            //alert(resp.coords.latitude +" "+ resp.coords.longitude);
+            this.latitude = ""+resp.coords.latitude;
+            this.longitude = ""+ resp.coords.longitude;
+            // resp.coords.longitude
+           }).catch((error) => {
+             console.log('Error getting location', error);
+           });
 
     }
 
@@ -76,10 +86,10 @@ export class View {
      * Esse arquivo é salvo na pasta file do diretorio da aplicação denominado de 'files'
      * o diretorio é /storage/Android/data/io.ionic/started/files/filename.txt.
      */
-    writeFile(something:any, filename:string) {
+    writeFile(something: any, filename: string) {
         this.blob = new Blob(something);
 
-        this.file.writeFile(this.file.externalDataDirectory, filename+".txt", this.blob, { replace: true, append: false });
+        this.file.writeFile(this.file.externalDataDirectory, filename + ".txt", this.blob, { replace: true, append: false });
 
     }
 
@@ -88,7 +98,7 @@ export class View {
 
         var mainchart;
 
-        this.graficoAIM = HighCharts.chart("containerAIM", {
+        this.graficoAIM = Highcharts.chart("containerAIM", {
             chart: {
                 type: 'scatter',
                 zoomType: 'xy',
@@ -97,7 +107,7 @@ export class View {
                 backgroundColor: "black",
                 events: {
                     load: function () {
-                        mainchart = this; // `this` is the reference to the chart
+                
                     }
                 }
             },
@@ -156,7 +166,7 @@ export class View {
                 }
             },
             series: [{
-                name: 'Angle  ',
+                name: "Angle",
                 type: undefined, //No Ionic 4, se faltar essa parte dar um erro que pode demorar em media 4 horas
                 //data: [[0.6, 0.2]]
                 marker: {
@@ -164,7 +174,7 @@ export class View {
                     lineWidth: null, //largura da inha de contorno
                     fillColor: 'red', //cor do preenchimento do ponto
                     lineColor: "red", // cor do contorno do ponto
-                    radius: 3
+                    radius: 2
                 },
 
             },
@@ -176,7 +186,7 @@ export class View {
                     lineWidth: null, //largura da inha de contorno
                     fillColor: 'blue', //cor do preenchimento do ponto
                     lineColor: "blue", // cor do contorno do ponto
-                    radius: 3
+                    radius: 2
                 },
             }],
             navigation: {
@@ -188,7 +198,7 @@ export class View {
     }
 
     async sensogramaChart() {
-        this.sensogramaAIM = HighCharts.chart("containerSensogramaAIM", {
+        this.sensogramaAIM = Highcharts.chart("containerSensogramaAIM", {
             chart: {
                 type: 'spline',
                 marginRight: 5,
@@ -230,7 +240,47 @@ export class View {
                 pointFormat: 'Time: {point.x:2f}<br/>y: {point.y:.4f}'
             },
             legend: {
-                enabled: true,
+
+                backgroundColor: '#5F5A59',
+                shadow: true,
+                layout: 'vertical',
+                width: 100,
+                itemMarginTop: 0,
+                itemMarginBottom: 0,
+
+                //Estilo da legenda padrão
+                itemStyle: {
+                    color: '#ffffff',
+                    fontWeight: 'bold'
+                },
+                //Estilo da legenda ao clicar
+                itemHiddenStyle: {
+                    color: '#AEAEAE'
+                }
+            },
+
+            plotOptions: {
+                series: {
+                    events: {
+                        show: function () {
+                            var chart = this.chart,
+                                series = chart.series,
+                                i = series.length,
+                                otherSeries;
+                            while (i--) {
+                                otherSeries = series[i];
+                                if (otherSeries != this && otherSeries.visible) {
+                                    otherSeries.hide();
+                                }
+                            }
+                        },
+                        legendItemClick: function () {
+                            if (this.visible) {
+                                return false;
+                            }
+                        }
+                    }
+                },
             },
             exporting: {
                 enabled: true,
@@ -239,19 +289,39 @@ export class View {
                 }
             },
             series: [{
-                name: 'Min',
-                color: 'rgba(255, 0, 0, .6)',
+                name: "Min",
+                color: 'rgba(255, 0, 0, 1)',
                 type: undefined,
+                marker: {
+                    symbol: 'circle', //"circle", "square", "diamond", "triangle" and "triangle-down".
+                    radius: 3,
+                },
                 //data: []
-            }/*, {
-            name: 'Assimetry',
-            color: 'rgba(240, 255, 0, 1)',
-            data: []
-        },{
-            name: 'Width',
-            color: 'rgba(154, 18, 179, 1)',
-            data: [ ]
-        }*/]
+            }, {
+                name: "Assimetry",
+                color: 'rgba(0, 255, 0, 1)',
+                type: undefined,
+                visible: false,
+                marker: {
+                    symbol: 'circle', //"circle", "square", "diamond", "triangle" and "triangle-down".
+                    radius: 3,
+                },
+            },
+            {
+                name: "Width",
+                color: 'rgba(0, 0, 255, 1)',
+                type: undefined,
+                visible: false,
+                marker: {
+                    symbol: 'circle', //"circle", "square", "diamond", "triangle" and "triangle-down".
+                    radius: 3,
+                },
+            }],
+            navigation: {
+                buttonOptions: {
+                    enabled: true
+                }
+            }
         });
     }
 
@@ -289,14 +359,14 @@ export class View {
         this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
 
         this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
-        
+
     }
 
     ngAfterViewChecked() {
-        //Called after every check of the component's view. Applies to components only.
-        //Add 'implements AfterViewChecked' to the class.
-        //this.sensogramaAIM.series[0].setData(this.cameraService.indicesMin);
+        //Chamada dos métodos de implementção dos valores dos sensogramas
         this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimo);
+        this.sensogramaAIM.series[1].setData(this.cameraService.indicesAssimetry);
+        this.sensogramaAIM.series[2].setData(this.cameraService.indicesWidth);
 
 
     }
@@ -315,7 +385,8 @@ export class View {
 
     calibraDryCell() {
         this.cameraService.dry();
-        
+        this.cameraService.stopCamera();
+
     }
 
 
@@ -346,7 +417,10 @@ export class View {
     clear() {
         //alert(this.cameraService.indicesMin);
         this.sensogramaService.indicesMinimo = []; //Apaga os valores do gráfico do sensograma
-        //alert(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell));
+        this.cameraService.indicesAssimetry = [];
+        this.cameraService.indicesWidth = [];
+        //console.log(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell));
+        
     }
 
     public corEvento(comprimentoDeOnda) {
@@ -523,6 +597,13 @@ export class View {
                     type: "radio",
                     label: "Right",
                     value: "right"
+                },
+                {
+                    name: "Center",
+                    type: "radio",
+                    label: "Center",
+                    value: "auto"
+                
                 }
             ],
             buttons: [
@@ -541,6 +622,8 @@ export class View {
                             this.cardSize("left");
                         } else if (data == "right") {
                             this.cardSize("right");
+                        } else if (data == "auto"){
+                            this.cardSize("auto");
                         }
 
                         console.log("Confirm Ok");
@@ -582,11 +665,16 @@ export class View {
                         valorTamanho.style.width = `${tLargura}px`;
                         valorTamanho.style.height = `${tAltura}px`;
 
-                        if (isString(position)) {
+                            console.log(position);
+
+                        if (position == "left" || position == "right") {
                             valorTamanho.style.cssFloat = String(position);
                             valorTamanho.style.paddingTop = "0px";
                         } else {
                             valorTamanho.style.cssFloat = "none";
+                            valorTamanho.style.marginLeft = "auto";
+                            valorTamanho.style.marginRight = "auto";
+                            valorTamanho.style.marginTop = "0";
                             valorTamanho.style.paddingTop = "0px";
                         }
                     }
@@ -610,44 +698,48 @@ export class View {
     }
 
     breakText(numbers: []) {
-        let valuesWithBreak = [];
+        let valuesWithBreak = []; 
         for (let i = 0; i <= numbers.length; i++) {
             valuesWithBreak[i] = numbers[i] + "\n";
         }
+        valuesWithBreak.push("Lat "+this.latitude+ " ");
+        valuesWithBreak.push("Long "+this.longitude);
         return valuesWithBreak;
     }
 
-    saveMinValues(values:any, filename:string){
+    saveMinValues(values: any, filename: string) {
         let btValues = this.breakText(values);
         this.writeFile(btValues, filename);
     }
 
-    saveDryCellIndices(values:any, filename:string){
+    saveDryCellIndices(values: any, filename: string) {
         let btValues = this.breakText(values);
         this.writeFile(btValues, filename);
     }
 
-    saveAimIndices(values:any, filename:string){
+    saveAimIndices(values: any, filename: string) {
         let btValues = this.breakText(values);
         this.writeFile(btValues, filename);
     }
 
-    downloadFiles(){
+    downloadFiles() {
         let currentdate = new Date();
         let actualyTime = currentdate.getDate() + "-"
-                + (currentdate.getMonth()+1)  + "-" 
-                + currentdate.getFullYear() + "-"  
-                + currentdate.getHours() + "-"  
-                + currentdate.getMinutes() + "-" 
-                + currentdate.getSeconds();
-    
-    this.saveMinValues(this.sensogramaService.indicesMinimo, "minValues_"+actualyTime);
-    this.saveDryCellIndices(this.cameraService._currentIndicesDryCell, "dryCell_"+actualyTime);
-    this.saveAimIndices(this.cameraService.indicesGraphic, "indicesAIM_"+actualyTime);
-    
+            + (currentdate.getMonth() + 1) + "-"
+            + currentdate.getFullYear() + "-"
+            + currentdate.getHours() + "-"
+            + currentdate.getMinutes() + "-"
+            + currentdate.getSeconds();
+
+        this.saveMinValues(this.sensogramaService.indicesMinimo, "minValues_" + actualyTime);
+        this.saveDryCellIndices(this.cameraService._currentIndicesDryCell, "dryCell_" + actualyTime);
+        this.saveAimIndices(this.cameraService.indicesGraphic, "curvaAIM_" + actualyTime);
+
     }
 
-  
+   
+
+
 }
 
 
