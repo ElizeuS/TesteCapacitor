@@ -12,12 +12,12 @@ export class TabsPage {
   comprimentoDeOn: any;
 
   constructor(public cameraService: CameraService){
-     
+
   }
-  
+
   ngOnInit() {
     this.cameraService.startCamera();
-    
+
   }
 
 
@@ -92,8 +92,8 @@ export class TabsPage {
   setColor(r, g, b){
     let teste = document.getElementById("card-color");
     teste.style.backgroundColor = `rgb(${r},${g}, ${b})`;
-    
-    
+
+
   }
 
   ativarModos(){
@@ -101,10 +101,12 @@ export class TabsPage {
     let button2 = document.getElementById("advancedMode2");
     let button3 = document.getElementById("advancedMode3");
     let button4 = document.getElementById("advancedMode4");
+    let button5 = document.getElementById("advancedMode5");
     button1.style.display = "block";
     button2.style.display = "block";
     button3.style.display = "block";
     button4.style.display = "block";
+    button5.style.display = "block";
   }
 
   desativarModos(){
@@ -112,10 +114,12 @@ export class TabsPage {
     let button2 = document.getElementById("advancedMode2");
     let button3 = document.getElementById("advancedMode3");
     let button4 = document.getElementById("advancedMode4");
+    let button5 = document.getElementById("advancedMode5");
     button1.style.display = "none";
     button2.style.display = "none";
     button3.style.display = "none";
     button4.style.display = "none";
+    button5.style.display = "none";
   }
 
 

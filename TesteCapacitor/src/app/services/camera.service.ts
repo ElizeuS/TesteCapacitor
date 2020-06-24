@@ -4,6 +4,7 @@ import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, Camer
 import { Filter, GrayScaleFilter } from '../models/filter';
 import { median, average } from 'filters';
 import { SensogramaService } from './sensograma.service';
+import { IfStmt } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -21,21 +22,35 @@ export class CameraService {
   _originalImg: MarvinImage;  // original image
   _outputImg: MarvinImage;  // modified image by the filters
   _filters: Filter[] = [];  // filters to bind in the list
-  //result1: any; //  
+  //result1: any; //
   _currentIndicesDryCell = [];
+  _currentIndicesDryCellG = [];
+  _currentIndicesDryCellB = [];
 
   arrayMin: [];
 
   private _choiseMinCS: any;
 
   private _indicesGraphic = [];
+  private _indicesGraphicG = [];
+  private _indicesGraphicB = [];
+
   private _indicesMin = [];
   private _indicesAtuais = [];
   private _channel = 0; //variavel para o canal (R, G, B) (0, 1, 2)
   private _minHunterX: any;
+
   private _dadosAIM = [];
+  private _dadosAIMG = [];
+  private _dadosAIMB = [];
 
+  private _minR;
+  private _minG;
+  private _minB;
 
+  private _indicesMinimoR = [];
+  private _indicesMinimoG = [];
+  private _indicesMinimoB = [];
 
   private _smoothinMode = 0; //Variável de seleção de suaviação 0 = nennhum, 1 = mediana, 2 = media
   private _windowsValue: 3; //Valor da janela de suavização
@@ -48,11 +63,12 @@ export class CameraService {
   //Arrays para armazenar as séries de assimetria e largura
   private _indicesAssimetry = [];
   private _indicesWidth = [];
- 
+
 
   public constructor(private _cameraPreview: CameraPreview, private sensogramaService: SensogramaService) {
     this.comp = 670;
     this._channel = 0; //Setando o canal inicial Verlelho (0)
+    this._choiseMinCS = 1; //1 = hunter, 2 = polynomial, 3 = centroid
     this.windowsValue = 3;
     this.smoothinMode = 0;
 
@@ -68,8 +84,8 @@ export class CameraService {
   private _cameraPreviewOpts: CameraPreviewOptions = {
     x: 200, //Posição em que a câmera vai aparecer
     y: 200, //Posição em que a câmera vai aparecer
-    width: 100,
-    height: 100,
+    width: 70,
+    height: 70,
     tapPhoto: true,
     //camera: this._cameraPreview.CAMERA_DIRECTION.FRONT,
     previewDrag: true,
@@ -91,7 +107,7 @@ export class CameraService {
       });
   }
 
-  async stopCamera(){
+  async stopCamera() {
     this.cameraPreview.stopCamera();
   }
 
@@ -103,6 +119,7 @@ export class CameraService {
         this.picture = 'data:image/jpeg;base64,' + res; // convertendo a imagem em data string jpeg
         this.loadImage().then(() => this.takePicture()); //quando concluir o loadimage() inicia o takePicture()
         // chama recursivamente
+
       },
       (err) => {
         console.log(err)
@@ -122,7 +139,7 @@ export class CameraService {
 
   async itemSelected(filter: Filter) {
     let img = filter.applyFilter(this._originalImg, this._outputImg);
-    //const response = await 
+    //const response = await
     this.getPointSpr(img);
     // console.log(response);
   }
@@ -139,87 +156,129 @@ export class CameraService {
   }
 
 
-  //TERMINAR ESSAFUNÇÃO, VERIFICAR CANAL RGB PARA SELECIONAR A AMOSTRAGEM.
-  checkChannel() {
-    if (this.channel == 0) {
 
-    } else if (this.channel == 1) {
+  /*FUNÇÃO QUE CALCULA OS VALORES DA CURVA SPR BASEADO NO CANAL SELECIONADO PELO USUÁRIO
+    RED = 0
+    GREEN = 1
+    BLUE = 2
 
-    } else if (this.channel == 2) {
-
-    }
-  }
-
-  async getPointSpr(image: MarvinImage) {
+    OS VALORES SÃO ARMAZENADOS NO MESMO ARRAY, FUTURAMENTE PODE SER IMPLEMENTADO UM
+    ARRAY PRA CADA CANAL
+    */
+  getPointSpr(image: MarvinImage) {
     let _soma = [];
+    let _somaG = [];
+    let _somaB = [];
     let _media = [];
+    let _mediaG = [];
+    let _mediaB = [];
+    let _indicesMinColR = []
+    let _indicesMinColG = []
+    let _indicesMinColB = []
 
     //Percorre o array para pegar as somas dos valores por coluna
-    for (let i = 0; i < image.getWidth(); i++) {
+  /*   for (let i = 0; i < image.getWidth(); i++) {
       for (let j = 0; j < image.getHeight(); j++) {
-
-        if (_soma[i] == null) {
+        if (_soma[i] == null && _somaG[i] == null && _somaB[i] == null) {
           _soma.push(image.getIntComponent0(i, j));
+          _somaG.push(image.getIntComponent1(i, j));
+          _somaB.push(image.getIntComponent2(i, j));
         } else {
           //_soma[j] = _soma[j] + image.getIntComponent0(i, j);
           _soma[i] = _soma[i] + image.getIntComponent0(i, j);
+          _somaG[i] = _somaG[i] + image.getIntComponent1(i, j);
+          _somaB[i] = _somaB[i] + image.getIntComponent2(i, j);
         }
-
       }
+    } */
+
+
+    let v = []
+    for (let j = 0; j < image.getWidth(); j++) {
+      let menorR = 255;
+      let menorG = 255;
+      let menorB = 255;
+      for (let i = 0; i < image.getHeight(); i++) {
+        if(image.getIntComponent0(j, i) < menorR){
+          menorR = image.getIntComponent0(j, i);
+        }
+        if(image.getIntComponent1(j, i) < menorG){
+          menorG = image.getIntComponent1(j, i);
+        }
+        if(image.getIntComponent1(j, i) < menorB){
+          menorB = image.getIntComponent2(j, i);
+        }
+      }
+      _indicesMinColR.push(menorR);
+      _indicesMinColG[j] = menorG;
+      _indicesMinColB[j] = menorB;
+
     }
 
 
-    //alert(this._cameraPreview.getSupportedPictureSizes());
-    //alert("Altura : " + image.getHeight() + " Largura: " + image.getWidth());
 
-    //Percorre o array para calcular a MÉDIA por COLUNA
+   /*  //Percorre o array para calcular a MÉDIA por COLUNA
     for (let i = 0; i < _soma.length; i++) {
-      _media[i] = (_soma[i] / (parseInt(image.getWidth() + 1)));
+      _media[i] = (_soma[i] / (parseInt(image.getWidth())));
       //alterei de getWidth() pra pois a lógica está errada getHeight()
+      _mediaG[i] = (_somaG[i] / (parseInt(image.getWidth())));
 
-    }
+      _mediaB[i] = (_somaB[i] / (parseInt(image.getWidth())));
+    } */
 
 
     if (this._currentIndicesDryCell.length == 0) {
       //verifica se os valores de referência estão vazios e setam o vetor
-      this._currentIndicesDryCell = _media; //Seta os valores de referência
+      this._currentIndicesDryCell =  _indicesMinColR;
+      //Seta os valores de referência
+      this._currentIndicesDryCellG =  _indicesMinColG;
+
+      this._currentIndicesDryCellB = _indicesMinColB;
     }
 
     let dadosAIM = [];
-    for (let i = 0; i < _media.length; i++) {
-      dadosAIM.push(_media[i] / this._currentIndicesDryCell[i]);
+    let dadosAIMG = [];
+    let dadosAIMB = [];
+    for (let i = 0; i < this._currentIndicesDryCell.length; i++) {
+      dadosAIM.push( _indicesMinColR[i] / this._currentIndicesDryCell[i]);
+      dadosAIMG.push( _indicesMinColG[i] / this._currentIndicesDryCellG[i]);
+      dadosAIMB.push( _indicesMinColB[i]/ this._currentIndicesDryCellB[i]);
     }
 
 
     //PROCESSO QUE VERIFICA A OPÇÃO DE SUAVIZAÇÃO ESCOLHIDA E APLICA O MÉTODO
     if (this._smoothinMode == 0) {
-      this._indicesGraphic = dadosAIM; //guarda os valores das imaqgem atual
+      this._indicesGraphic = dadosAIM;
+      this._indicesGraphicG = dadosAIMG;
+      this._indicesGraphiB = dadosAIMB;  //guarda os valores das imaqgem atual
+      //guarda os valores das imagem atual
     } else if (this._smoothinMode == 1) {
       this._indicesGraphic = median(dadosAIM, this.windowsValue);
+      this._indicesGraphicG = median(dadosAIMG, this.windowsValue);
+      this._indicesGraphicB = median(dadosAIMB, this.windowsValue);
     } else if (this._smoothinMode == 2) {
       this._indicesGraphic = average(dadosAIM, this.windowsValue);
+      this._indicesGraphicG = average(dadosAIMG, this.windowsValue);
+      this._indicesGraphicB = average(dadosAIMB, this.windowsValue);
     }
-    this._dadosAIM = dadosAIM;
 
-    this.sensogramaService.calculaMin(this._choiseMinCS, this.dadosAIM);
+    this._dadosAIM = dadosAIM;
+    this._dadosAIMG = dadosAIMG;
+    this._dadosAIMB = dadosAIMB;
+
+    /* Este método submete os arrays de dados dos canais RGB para o serviço que verifica e calcula o mínimo */
+    try {
+      this.sensogramaService.calculaMin(this._choiseMinCS, this.indicesGraphic, this._indicesGraphicG , this._indicesGraphicB);
+    } catch (error) {
+      alert(error)
+    }
+
     //this.sensogramaService.minimoHunter(dadosAIM);
     //this.sensogramaService.minimoPolinomial(dadosAIM);
 
-
-    /**
-     * A função a seguir realiza a normalização dos valores de referência.
-    this.normalizacao(this._currentIndicesDryCell);*/
-    /*let minHunX;
-    let min = 255.0;
-    for (let i = 0; i < dadosAIM.length; i++) {
-      if (min > dadosAIM[i]) {
-        min = dadosAIM[i];
-        minHunX = i;
-      }
-    }
-    this._minHunterX = minHunX; //Pega os valores do minimo no eixo X
-
-    */
+    this._indicesMinimoR.push(parseFloat(this._minR));
+    this._indicesMinimoG.push(parseFloat(this._minG));
+    this._indicesMinimoB.push(parseFloat(this._minB));
 
     let max = 0;
     for (let j = 0; j < dadosAIM.length; j++) {
@@ -227,7 +286,7 @@ export class CameraService {
         max = dadosAIM[j];
       }
     }
-    let teta_medio = ((max + parseFloat(this.sensogramaService.minimo)) / 2);
+    let teta_medio = ((max + parseFloat(this.sensogramaService.minimoR)) / 2);
 
     let aux = 0;
     let valorCL = 0;
@@ -272,22 +331,18 @@ export class CameraService {
       dados.push(((dadosAIM[j] - min) / (max - min)));
     }
 
-
-    // console.log(dados + " DADOS NORMALIZAÇÃO");
-
-    //Descomente o codigo abaixo para apresentar no grafico
-    //this.graficoAIM.series[1].setData(dados); //DESCOMENTAR
-    //console.log(dadosAIM);
     return dados;
   }
 
   //Atualiza os valores de DryCell
   dry() {
     this._currentIndicesDryCell = this._indicesAtuais;
+    this._currentIndicesDryCellG = [];
+    this._currentIndicesDryCellB = [];
   }
 
 
-  /** 
+  /**
    * @method verifyHideShowCam() Verifica e exibe/esconde a câmera
    * */
   async verifyHideShowCam() {
@@ -311,6 +366,20 @@ export class CameraService {
   public set indicesGraphic(value) {
     this._indicesGraphic = value;
   }
+  public get indicesGraphicG() {
+    return this._indicesGraphicG;
+  }
+  public set indicesGraphicG(value) {
+    this._indicesGraphicG = value;
+  }
+  public get indicesGraphicB() {
+    return this._indicesGraphicB;
+  }
+  public set indicesGraphicB(value) {
+    this._indicesGraphicB = value;
+  }
+
+
   public get smoothinMode(): any {
     return this._smoothinMode;
   }
@@ -379,14 +448,14 @@ export class CameraService {
     this._choiseMinCS = value;
   }
 
-   
+
   public get indicesAssimetry() {
     return this._indicesAssimetry;
   }
   public set indicesAssimetry(value) {
     this._indicesAssimetry = value;
   }
-  
+
   public get indicesWidth() {
     return this._indicesWidth;
   }

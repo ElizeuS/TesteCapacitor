@@ -23,7 +23,7 @@ export class View {
     charData: any;
     graficoAIM: any;
     sensogramaAIM: any;
-    minHunter: any;
+    minimoCH: any;
     largura: any;
     assimetria: any;
     comprimento_deOnda: any;
@@ -37,6 +37,7 @@ export class View {
     longitude: string;
     latitude: string;
 
+    private channel;
     @ViewChild(IonSegment) segment: IonSegment;
     public constructor(private platform: Platform, private cameraService: CameraService, public tabsPage: TabsPage,
         private alertCtrl: AlertController,
@@ -46,17 +47,19 @@ export class View {
         //this.charData = getHighChartData;
         this.compri = 670;
         console.log(this.cameraService.comp);
-        //this.graficoAIM.series[0].setData(this.cameraService._indicesGraphic); 
+        //this.graficoAIM.series[0].setData(this.cameraService._indicesGraphic);
         //this.tabsPage.setColor(255, 0, 0);
+
+        this.channel = 0; //0 = RED, 1 = GREEN, 2 = BLUE
 
         this.geolocation.getCurrentPosition().then((resp) => {
             //alert(resp.coords.latitude +" "+ resp.coords.longitude);
-            this.latitude = ""+resp.coords.latitude;
-            this.longitude = ""+ resp.coords.longitude;
+            this.latitude = "" + resp.coords.latitude;
+            this.longitude = "" + resp.coords.longitude;
             // resp.coords.longitude
-           }).catch((error) => {
-             console.log('Error getting location', error);
-           });
+        }).catch((error) => {
+            console.log('Error getting location', error);
+        });
 
     }
 
@@ -107,7 +110,7 @@ export class View {
                 backgroundColor: "black",
                 events: {
                     load: function () {
-                
+
                     }
                 }
             },
@@ -119,7 +122,7 @@ export class View {
             },
             xAxis: {
                 title: {
-                    text: "Angle",
+                    text: "Pixel",
                     style: { "color": "#ffffff" }
                 }
             },
@@ -166,7 +169,7 @@ export class View {
                 }
             },
             series: [{
-                name: "Angle",
+                name: "Pixel",
                 type: undefined, //No Ionic 4, se faltar essa parte dar um erro que pode demorar em media 4 horas
                 //data: [[0.6, 0.2]]
                 marker: {
@@ -350,25 +353,70 @@ export class View {
         // getHighChartData.series[0].
 
         // setData(this.cameraService.indicesGraphic); #DEFASADO
+        if (this.channel == 0) {
+            this.minimoCH = this.sensogramaService.minimoR;
+        } else if(this.channel == 1){
+            this.minimoCH = this.sensogramaService.minimoG;
+        }else if(this.channel ==2){
+            this.minimoCH = this.sensogramaService.minimoB;
+        }
 
-        this.minHunter = this.sensogramaService.minimo;
         this.largura = this.cameraService.largura;
         this.assimetria = this.cameraService.assimetria;
 
         this.graficoAIM.xAxis.length = this.cameraService.indicesGraphic.length; //cnfigura o tamanho do eixo x do grafico
-        this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
 
-        this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
+        try {
+            if (this.channel == 0) {
+                this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
+                this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
+
+            } else if (this.channel == 1) {
+
+                this.graficoAIM.series[0].setData(this.cameraService.indicesGraphicG); //Adiciona os valores no gráfico do sensograma da tab View
+                this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCellG)); //plotando os valores de referência
+            } else if (this.channel == 2) {
+
+                this.graficoAIM.series[0].setData(this.cameraService.indicesGraphicB); //Adiciona os valores no gráfico do sensograma da tab View
+                this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCellB)); //plotando os valores de referência
+
+            } else {
+                this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
+                this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
+            }
+
+        } catch (error) {
+            alert(error)
+        }
+        //this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
+
+        //this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
 
     }
 
     ngAfterViewChecked() {
         //Chamada dos métodos de implementção dos valores dos sensogramas
-        this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimo);
-        this.sensogramaAIM.series[1].setData(this.cameraService.indicesAssimetry);
-        this.sensogramaAIM.series[2].setData(this.cameraService.indicesWidth);
+
+        // DESCOMENTAR this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimo);
+        try {
 
 
+            if (this.channel == 0) {
+                this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimoR);
+            } else if (this.channel == 1) {
+                this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimoG);
+            } else if (this.channel == 2) {
+                this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimoB);
+            } else {
+                this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimoR);
+            }
+            //this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimoR);
+            this.sensogramaAIM.series[1].setData(this.cameraService.indicesAssimetry);
+            this.sensogramaAIM.series[2].setData(this.cameraService.indicesWidth);
+
+        } catch (error) {
+            alert(error)
+        }
     }
 
     ngOnInit() {
@@ -416,11 +464,14 @@ export class View {
 
     clear() {
         //alert(this.cameraService.indicesMin);
-        this.sensogramaService.indicesMinimo = []; //Apaga os valores do gráfico do sensograma
+        this.sensogramaService.indicesMinimoR = []; //Apaga os valores do gráfico do sensograma
+        this.sensogramaService.indicesMinimoG = [];
+        this.sensogramaService.indicesMinimoB = [];
+
         this.cameraService.indicesAssimetry = [];
         this.cameraService.indicesWidth = [];
         //console.log(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell));
-        
+
     }
 
     public corEvento(comprimentoDeOnda) {
@@ -603,7 +654,7 @@ export class View {
                     type: "radio",
                     label: "Center",
                     value: "auto"
-                
+
                 }
             ],
             buttons: [
@@ -622,7 +673,7 @@ export class View {
                             this.cardSize("left");
                         } else if (data == "right") {
                             this.cardSize("right");
-                        } else if (data == "auto"){
+                        } else if (data == "auto") {
                             this.cardSize("auto");
                         }
 
@@ -665,7 +716,7 @@ export class View {
                         valorTamanho.style.width = `${tLargura}px`;
                         valorTamanho.style.height = `${tAltura}px`;
 
-                            console.log(position);
+                        console.log(position);
 
                         if (position == "left" || position == "right") {
                             valorTamanho.style.cssFloat = String(position);
@@ -698,12 +749,12 @@ export class View {
     }
 
     breakText(numbers: []) {
-        let valuesWithBreak = []; 
+        let valuesWithBreak = [];
         for (let i = 0; i <= numbers.length; i++) {
             valuesWithBreak[i] = numbers[i] + "\n";
         }
-        valuesWithBreak.push("Lat "+this.latitude+ " ");
-        valuesWithBreak.push("Long "+this.longitude);
+        valuesWithBreak.push("Lat " + this.latitude + " ");
+        valuesWithBreak.push("Long " + this.longitude);
         return valuesWithBreak;
     }
 
@@ -737,7 +788,12 @@ export class View {
 
     }
 
-   
+    selectChannel(ch) {
+        this.channel = ch;
+        this.cameraService.channel = ch;
+
+
+    }
 
 
 }
