@@ -278,7 +278,7 @@ export class CameraService {
 
     this._indicesMinimoR.push(parseFloat(this._minR));
     this._indicesMinimoG.push(parseFloat(this._minG));
-    this._indicesMinimoB.push(parseFloat(this._minB));
+    this._indicesMinimoB.push(parseFloat(this._minB)); 
 
     let max = 0;
     for (let j = 0; j < dadosAIM.length; j++) {
