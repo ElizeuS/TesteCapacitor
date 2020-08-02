@@ -38,13 +38,13 @@ export class SensogramaService {
 
     } else if (choise == 2) {
       this.minimoR = this.minimoPolinomial(dadosAIM).toFixed(3);
-      this._indicesMinimoR.push(this.minimoR);
+      this._indicesMinimoR.push(parseFloat(this.minimoR));
 
       this.minimoG = this.minimoPolinomial(dadosAIMG).toFixed(3);
-      this._indicesMinimoR.push(this.minimoG);
+      this._indicesMinimoR.push(parseFloat(this.minimoG));
 
       this.minimoB = this.minimoPolinomial(dadosAIMB).toFixed(3);
-      this._indicesMinimoB.push(this.minimoB);
+      this._indicesMinimoB.push(parseFloat(this.minimoB));
 
 
     } else if (choise == 3) {
