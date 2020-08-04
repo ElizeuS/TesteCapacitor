@@ -17,5 +17,10 @@
       "es2018",
       "dom"
     ]
+  },
+  "angularCompilerOptions": {
+    "types": ["node"],
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
   }
 }

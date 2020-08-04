@@ -11,9 +11,12 @@ export class SensogramaService {
 
   private _minimoB;
 
+  largura: number;
+  assimetria: number;
 
+  indicesAssimetry: number[] = [];
+  indicesWidth: number[] = []
 
-  private _indicesMinimo = [];
   private _indicesMinimoR = [];
   private _indicesMinimoG = [];
   private _indicesMinimoB = [];
@@ -35,6 +38,8 @@ export class SensogramaService {
 
       this.minimoB = this.minimoHunter(dadosAIMB).toFixed(3);
       this._indicesMinimoB.push(parseFloat(this.minimoB));
+
+      this.calculateAsymmetryWidth(this.minimoR, dadosAIM);
 
     } else if (choise == 2) {
       this.minimoR = this.minimoPolinomial(dadosAIM).toFixed(3);
@@ -70,6 +75,37 @@ export class SensogramaService {
 
     }
 
+  }
+
+  calculateAsymmetryWidth( currentMinimun, dataAIM ) {
+    let max = 0;
+    for (let j = 0; j < dataAIM.length; j++) {
+      if (max < dataAIM[j]) {
+        max = dataAIM[j];
+      }
+    }
+
+    let teta_medio = (max + parseFloat(currentMinimun)) / 2;
+
+    let aux = 0;
+    let valorCL = 0;
+    let valorCR = 0;
+    for (let k = 0; k < dataAIM.length; k++) {
+      if (dataAIM[k] <= teta_medio) {
+        if (aux == 0) {
+          valorCL = dataAIM[k];
+          aux++;
+        } else {
+          valorCR = dataAIM[k];
+        }
+      }
+    }
+
+  this.largura = parseFloat("" + (valorCL - valorCR).toFixed(3));
+  this.assimetria = parseFloat("" + (valorCL / valorCR).toFixed(3));
+
+  this.indicesAssimetry.push(this.assimetria);
+  this.indicesWidth.push(this.largura);
   }
 
 
@@ -112,6 +148,9 @@ export class SensogramaService {
     console.log("Mínimo: y " + (b ^ 2 - 4 * a * c) / (-4 * a));
     // alert(regressionMin);
     //alert(5);
+
+
+
     return regressionMin;
 
   }
@@ -135,13 +174,6 @@ export class SensogramaService {
   }
   public set minimoB(value) {
     this._minimoB = value;
-  }
-
-  public get indicesMinimo() {
-    return this._indicesMinimo;
-  }
-  public set indicesMinimo(value) {
-    this._indicesMinimo = value;
   }
 
   public get indicesMinimoR() {

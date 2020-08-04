@@ -13,6 +13,7 @@ import { CameraPreview } from '@ionic-native/camera-preview/ngx';
 import {CameraService} from '../../src/app/services/camera.service';
 import { File } from '@ionic-native/file/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import * as Jimp from "jimp";
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,7 +26,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
     SplashScreen,
     File,
     Geolocation,
-    
+    Jimp,
+
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
