@@ -33,7 +33,7 @@ export class View {
   latitude: string;
 
   private channel;
-  @ViewChild(IonSegment) segment: IonSegment;
+  segment: string;
   public constructor(
     private platform: Platform,
     private cameraService: CameraService,
@@ -43,7 +43,9 @@ export class View {
     private file: File,
     private geolocation: Geolocation
   ) {
-    //this.charData = getHighChartData;
+
+    this.segment = "aim"; //Seta o valor inicial do ion-segment
+
     this.compri = 670;
     console.log(this.cameraService.comp);
     //this.graficoAIM.series[0].setData(this.cameraService._indicesGraphic);
@@ -882,6 +884,30 @@ export class View {
       this.saveAimIndices(
         this.cameraService.indicesGraphicB,
         "curvaAIMB_" + actualyTime
+      );
+      this.saveAimIndices(
+        this.cameraService.indicesGraphicRMedian,
+        "curvaAIMRMedian_" + actualyTime
+      );
+      this.saveAimIndices(
+        this.cameraService.indicesGraphicGMedian,
+        "curvaAIMGMedian_" + actualyTime
+      );
+      this.saveAimIndices(
+        this.cameraService.indicesGraphicBMedian,
+        "curvaAIMBMedian_" + actualyTime
+      );
+      this.saveAimIndices(
+        this.cameraService.indicesGraphicRMean,
+        "curvaAIMRMean_" + actualyTime
+      );
+      this.saveAimIndices(
+        this.cameraService.indicesGraphicGMean,
+        "curvaAIMGMean_" + actualyTime
+      );
+      this.saveAimIndices(
+        this.cameraService.indicesGraphicBMean,
+        "curvaAIMBMean_" + actualyTime
       );
   }
 
