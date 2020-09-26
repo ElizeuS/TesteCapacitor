@@ -142,6 +142,7 @@ export class SensogramaService {
     const a = regression.coefficients[2];
     const b = regression.coefficients[1];
     const c = regression.coefficients[0];
+
     //alert(4);
     let regressionMin = (-b / (2 * a));
 

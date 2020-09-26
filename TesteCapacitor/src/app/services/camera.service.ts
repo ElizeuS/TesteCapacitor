@@ -28,6 +28,13 @@ export class CameraService {
   r: any;
   g: any;
   b: any;
+
+  globalCHannelRed: number[] = [];
+  globalCHannelGreen: number[] = [];
+  globalCHannelBlue: number[] = [];
+
+  nColumns: number;
+  nLines: number;
   //testRadioOpen: any; //variavel do Radio para dialogo
   picture: string;
 
@@ -74,7 +81,7 @@ export class CameraService {
   private _pictureOpts: CameraPreviewPictureOptions = {
     width: 400,
     height: 400,
-    quality: 70, //0=max compression, 100=max quality
+    quality: 100, //0=max compression, 100=max quality
   };
 
   private _cameraPreviewOpts: CameraPreviewOptions = {
@@ -140,15 +147,28 @@ export class CameraService {
 
     let sGreen = new Array(width + 1).join("0").split("").map(parseFloat);
     let sBlue = new Array(width + 1).join("0").split("").map(parseFloat);
-
+    this.nColumns = width;
+    this.nLines = height;
+    this.globalCHannelRed = [];
+    this.globalCHannelGreen = [];
+    this.globalCHannelBlue = [];
     for (let line = 0; line < height; line++) {
       for (let column = 0; column < width; column++) {
         sRed[column] += Jimp.intToRGBA(image.getPixelColor(column, line)).r;
         sGreen[column] += Jimp.intToRGBA(image.getPixelColor(column, line)).g;
         sBlue[column] += Jimp.intToRGBA(image.getPixelColor(column, line)).b;
+
+        this.globalCHannelRed.push(Jimp.intToRGBA(image.getPixelColor(column, line)).r);
+        this.globalCHannelGreen.push(Jimp.intToRGBA(image.getPixelColor(column, line)).g);
+        this.globalCHannelBlue.push(Jimp.intToRGBA(image.getPixelColor(column, line)).b);
+
       }
     }
-
+    /*
+    2  3  4
+    5  6  7
+    8  9  10
+    */
     this.currentRedV = await sRed.map(function (value) {
       return value / width;
     });
@@ -174,7 +194,7 @@ export class CameraService {
     }
   }
 
-  _base64ToArrayBuffer(base64) {
+  _base64ToArrayBuffer(base64) {;
     var binary_string = window.atob(base64);
     var len = binary_string.length;
     var bytes = new Uint8Array(len);

@@ -43,7 +43,6 @@ export class View {
     private file: File,
     private geolocation: Geolocation
   ) {
-
     this.segment = "aim"; //Seta o valor inicial do ion-segment
 
     this.compri = 670;
@@ -101,7 +100,6 @@ export class View {
   }
 
   async chartAIM() {
-
     this.graficoAIM = Highcharts.chart("containerAIM", {
       chart: {
         type: "scatter",
@@ -360,114 +358,121 @@ export class View {
   }
 
   ngAfterViewChecked() {
-     //plotando os valores de referência
+    //plotando os valores de referência
     try {
-
-    switch (this.channel) {
-      case 0:
-        if (this.cameraService.smoothinMode == 0) {
-          this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
-        } else if (this.cameraService.smoothinMode == 1) {
-          this.graficoAIM.series[0].setData(
-            this.cameraService.indicesGraphicRMedian
+      switch (this.channel) {
+        case 0:
+          if (this.cameraService.smoothinMode == 0) {
+            this.graficoAIM.series[0].setData(
+              this.cameraService.indicesGraphic
+            ); //Adiciona os valores no gráfico do sensograma da tab View
+          } else if (this.cameraService.smoothinMode == 1) {
+            this.graficoAIM.series[0].setData(
+              this.cameraService.indicesGraphicRMedian
+            );
+          } else if ((this.cameraService.smoothinMode = 2)) {
+            this.graficoAIM.series[0].setData(
+              this.cameraService.indicesGraphicRMean
+            );
+          }
+          this.graficoAIM.series[1].setData(
+            this.cameraService.normalizacao(
+              this.cameraService._currentIndicesDryCell
+            )
+          ); //plotando os valores de referência
+          this.sensogramaAIM.series[0].setData(
+            this.sensogramaService.indicesMinimoR
           );
-        } else if ((this.cameraService.smoothinMode = 2)) {
+          break;
+
+        case 1:
+          if (this.cameraService.smoothinMode == 0) {
+            this.graficoAIM.series[0].setData(
+              this.cameraService.indicesGraphicG
+            ); //Adiciona os valores no gráfico do sensograma da tab View
+          } else if (this.cameraService.smoothinMode == 1) {
+            this.graficoAIM.series[0].setData(
+              this.cameraService.indicesGraphicGMedian
+            );
+          } else if ((this.cameraService.smoothinMode = 2)) {
+            this.graficoAIM.series[0].setData(
+              this.cameraService.indicesGraphicGMean
+            );
+          }
+          this.graficoAIM.series[1].setData(
+            this.cameraService.normalizacao(
+              this.cameraService._currentIndicesDryCellG
+            )
+          ); //plotando os valores de referência
+          this.sensogramaAIM.series[0].setData(
+            this.sensogramaService.indicesMinimoG
+          );
+          break;
+
+        case 2:
+          if (this.cameraService.smoothinMode == 0) {
+            this.graficoAIM.series[0].setData(
+              this.cameraService.indicesGraphicB
+            ); //Adiciona os valores no gráfico do sensograma da tab View
+          } else if (this.cameraService.smoothinMode == 1) {
+            this.graficoAIM.series[0].setData(
+              this.cameraService.indicesGraphicBMedian
+            );
+          } else if ((this.cameraService.smoothinMode = 2)) {
+            this.graficoAIM.series[0].setData(
+              this.cameraService.indicesGraphicBMean
+            );
+          }
+          this.graficoAIM.series[1].setData(
+            this.cameraService.normalizacao(
+              this.cameraService._currentIndicesDryCellB
+            )
+          ); //plotando os valores de referência
+          this.sensogramaAIM.series[0].setData(
+            this.sensogramaService.indicesMinimoB
+          );
+          break;
+
+        default:
+          if (this.cameraService.smoothinMode == 0) {
+            this.graficoAIM.series[0].setData(
+              this.cameraService.indicesGraphic
+            ); //Adiciona os valores no gráfico do sensograma da tab View
+          } else if (this.cameraService.smoothinMode == 1) {
+            this.graficoAIM.series[0].setData(
+              this.cameraService.indicesGraphicRMedian
+            );
+          } else if ((this.cameraService.smoothinMode = 2)) {
+            this.graficoAIM.series[0].setData(
+              this.cameraService.indicesGraphicRMean
+            );
+          }
           this.graficoAIM.series[0].setData(
             this.cameraService.indicesGraphicRMean
           );
-        }
-        this.graficoAIM.series[1].setData(
-          this.cameraService.normalizacao(
-            this.cameraService._currentIndicesDryCell
-          )
-            ); //plotando os valores de referência
-            this.sensogramaAIM.series[0].setData(
-                this.sensogramaService.indicesMinimoR
-              );
-        break;
+          this.graficoAIM.series[1].setData(
+            this.cameraService.normalizacao(
+              this.cameraService._currentIndicesDryCell
+            )
+          ); //plotando os valores de referência
 
-      case 1:
-        if (this.cameraService.smoothinMode == 0) {
-          this.graficoAIM.series[0].setData(this.cameraService.indicesGraphicG); //Adiciona os valores no gráfico do sensograma da tab View
-        } else if (this.cameraService.smoothinMode == 1) {
-          this.graficoAIM.series[0].setData(
-            this.cameraService.indicesGraphicGMedian
-          );
-        } else if ((this.cameraService.smoothinMode = 2)) {
-          this.graficoAIM.series[0].setData(
-            this.cameraService.indicesGraphicGMean
-          );
-        }
-        this.graficoAIM.series[1].setData(
-          this.cameraService.normalizacao(
-            this.cameraService._currentIndicesDryCellG
-          )
-            ); //plotando os valores de referência
-            this.sensogramaAIM.series[0].setData(
-                this.sensogramaService.indicesMinimoG
-              );
-        break;
+          break;
+      }
+    } catch (error) {
+      //alert(error)
+    } finally {
+      this.sensogramaAIM.series[1].setData(
+        this.sensogramaService.indicesAssimetry
+      );
+      this.sensogramaAIM.series[2].setData(this.sensogramaService.indicesWidth);
+    }
+    //this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
 
-      case 2:
-        if (this.cameraService.smoothinMode == 0) {
-          this.graficoAIM.series[0].setData(this.cameraService.indicesGraphicB); //Adiciona os valores no gráfico do sensograma da tab View
-        } else if (this.cameraService.smoothinMode == 1) {
-          this.graficoAIM.series[0].setData(
-            this.cameraService.indicesGraphicBMedian
-          );
-        } else if ((this.cameraService.smoothinMode = 2)) {
-          this.graficoAIM.series[0].setData(
-            this.cameraService.indicesGraphicBMean
-          );
-        }
-        this.graficoAIM.series[1].setData(
-          this.cameraService.normalizacao(
-            this.cameraService._currentIndicesDryCellB
-          )
-            ); //plotando os valores de referência
-            this.sensogramaAIM.series[0].setData(
-                this.sensogramaService.indicesMinimoB
-              );
-        break;
+    //this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
 
-      default:
-        if (this.cameraService.smoothinMode == 0) {
-          this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
-        } else if (this.cameraService.smoothinMode == 1) {
-          this.graficoAIM.series[0].setData(
-            this.cameraService.indicesGraphicRMedian
-          );
-        } else if ((this.cameraService.smoothinMode = 2)) {
-          this.graficoAIM.series[0].setData(
-            this.cameraService.indicesGraphicRMean
-          );
-        }
-        this.graficoAIM.series[0].setData(
-          this.cameraService.indicesGraphicRMean
-        );
-        this.graficoAIM.series[1].setData(
-          this.cameraService.normalizacao(
-            this.cameraService._currentIndicesDryCell
-          )
-        ); //plotando os valores de referência
+    //Chamada dos métodos de implementção dos valores dos sensogramas
 
-        break;
-
-        }
-
-         } catch (error) {
-             //alert(error)
-        } finally {
-            this.sensogramaAIM.series[1].setData(this.sensogramaService.indicesAssimetry);
-            this.sensogramaAIM.series[2].setData(this.sensogramaService.indicesWidth);
-        }
-        //this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
-
-        //this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
-
-        //Chamada dos métodos de implementção dos valores dos sensogramas
-
-        // DESCOMENTAR this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimo);
+    // DESCOMENTAR this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimo);
     /*     try {
           if (this.channel == 0) {
             this.sensogramaAIM.series[0].setData(
@@ -494,7 +499,6 @@ export class View {
         } catch (error) {
           // alert(error)
         } */
-
   }
   ngOnInit() {
     this.chartAIM(); //Essa função está sendo inicializada assim que o aplicativo começa a ser executado
@@ -509,6 +513,8 @@ export class View {
 
   calibraDryCell() {
     this.cameraService.dry();
+    this.downloadReferences("Dry");
+
     // this.cameraService.stopCamera();
   }
 
@@ -819,13 +825,36 @@ export class View {
     return valuesWithBreak;
   }
 
-  saveMinValues(values: any, filename: string) {
+  breakTextArray(numbers: [], nColumns, nLines) {
+    let valuesWithBreak = [];
+    let valuesString = "";
+
+    let aux = 0;
+    for (let cont = 0; cont < nColumns * nLines; cont++) {
+      if (aux == nColumns - 1) {
+        valuesWithBreak.push(numbers[cont] + ",\n");
+        //valuesString += numbers[cont] + ",\n";
+        aux = 0;
+      } else {
+        valuesWithBreak.push(numbers[cont] + ",");
+        //valuesString += numbers[cont] + ", ";
+        aux += 1;
+      }
+    }
+    return valuesWithBreak;
+  }
+
+  saveValues(values: any, filename: string) {
     let btValues = this.breakText(values);
     this.writeFile(btValues, filename);
   }
 
-  saveDryCellIndices(values: any, filename: string) {
-    let btValues = this.breakText(values);
+  saveDryCellAnCurrentIndices(values: any, filename: string) {
+    let btValues = this.breakTextArray(
+      values,
+      this.cameraService.nColumns,
+      this.cameraService.nLines
+    );
     this.writeFile(btValues, filename);
   }
 
@@ -834,7 +863,7 @@ export class View {
     this.writeFile(btValues, filename);
   }
 
-  downloadFiles() {
+  downloadReferences(ref: string) {
     let currentdate = new Date();
     let actualyTime =
       currentdate.getDate() +
@@ -848,67 +877,96 @@ export class View {
       currentdate.getMinutes() +
       "-" +
       currentdate.getSeconds();
+    try {
+      this.saveDryCellAnCurrentIndices(
+        this.cameraService.globalCHannelRed,
+        "ChannelRefR_" + ref + "_" + actualyTime
+      );
+      this.saveDryCellAnCurrentIndices(
+        this.cameraService.globalCHannelGreen,
+        "ChannelRefG_" + ref + "_" + actualyTime
+      );
+      this.saveDryCellAnCurrentIndices(
+        this.cameraService.globalCHannelBlue,
+        "ChannelRefB_" + ref + "_" + actualyTime
+      );
+    } catch (error) {
+      alert(error)
+    }
 
-    this.saveMinValues(
+    alert(actualyTime);
+
+    return actualyTime;
+  }
+
+  downloadFiles() {
+    let actualyTime = this.downloadReferences("Wet");
+
+    this.saveValues(
+      this.cameraService.currentRedV, //VALORES ATUAIS
+      "actualyDataR_" + actualyTime
+    );
+
+    this.saveValues(
       this.sensogramaService.indicesMinimoR,
       "minValuesR_" + actualyTime
-      );
-      this.saveMinValues(
-        this.sensogramaService.indicesMinimoG,
-        "minValuesG_" + actualyTime
-      );
-      this.saveMinValues(
-        this.sensogramaService.indicesMinimoB,
-        "minValuesB_" + actualyTime
-      );
-    this.saveDryCellIndices(
+    );
+    this.saveValues(
+      this.sensogramaService.indicesMinimoG,
+      "minValuesG_" + actualyTime
+    );
+    this.saveValues(
+      this.sensogramaService.indicesMinimoB,
+      "minValuesB_" + actualyTime
+    );
+    this.saveValues(
       this.cameraService._currentIndicesDryCell,
       "dryCell_" + actualyTime
-      );
-      this.saveDryCellIndices(
-        this.cameraService._currentIndicesDryCellG,
-        "dryCellG_" + actualyTime
-      );
-      this.saveDryCellIndices(
-        this.cameraService._currentIndicesDryCellB,
-        "dryCellB_" + actualyTime
-      );
-    this.saveAimIndices(
+    );
+    this.saveValues(
+      this.cameraService._currentIndicesDryCellG,
+      "dryCellG_" + actualyTime
+    );
+    this.saveValues(
+      this.cameraService._currentIndicesDryCellB,
+      "dryCellB_" + actualyTime
+    );
+    this.saveValues(
       this.cameraService.indicesGraphic,
       "curvaAIM_" + actualyTime
-      );
-      this.saveAimIndices(
-        this.cameraService.indicesGraphicG,
-        "curvaAIMG_" + actualyTime
-      );
-      this.saveAimIndices(
-        this.cameraService.indicesGraphicB,
-        "curvaAIMB_" + actualyTime
-      );
-      this.saveAimIndices(
-        this.cameraService.indicesGraphicRMedian,
-        "curvaAIMRMedian_" + actualyTime
-      );
-      this.saveAimIndices(
-        this.cameraService.indicesGraphicGMedian,
-        "curvaAIMGMedian_" + actualyTime
-      );
-      this.saveAimIndices(
-        this.cameraService.indicesGraphicBMedian,
-        "curvaAIMBMedian_" + actualyTime
-      );
-      this.saveAimIndices(
-        this.cameraService.indicesGraphicRMean,
-        "curvaAIMRMean_" + actualyTime
-      );
-      this.saveAimIndices(
-        this.cameraService.indicesGraphicGMean,
-        "curvaAIMGMean_" + actualyTime
-      );
-      this.saveAimIndices(
-        this.cameraService.indicesGraphicBMean,
-        "curvaAIMBMean_" + actualyTime
-      );
+    );
+    this.saveValues(
+      this.cameraService.indicesGraphicG,
+      "curvaAIMG_" + actualyTime
+    );
+    this.saveValues(
+      this.cameraService.indicesGraphicB,
+      "curvaAIMB_" + actualyTime
+    );
+    this.saveValues(
+      this.cameraService.indicesGraphicRMedian,
+      "curvaAIMRMedian_" + actualyTime
+    );
+    this.saveValues(
+      this.cameraService.indicesGraphicGMedian,
+      "curvaAIMGMedian_" + actualyTime
+    );
+    this.saveValues(
+      this.cameraService.indicesGraphicBMedian,
+      "curvaAIMBMedian_" + actualyTime
+    );
+    this.saveValues(
+      this.cameraService.indicesGraphicRMean,
+      "curvaAIMRMean_" + actualyTime
+    );
+    this.saveValues(
+      this.cameraService.indicesGraphicGMean,
+      "curvaAIMGMean_" + actualyTime
+    );
+    this.saveValues(
+      this.cameraService.indicesGraphicBMean,
+      "curvaAIMBMean_" + actualyTime
+    );
   }
 
   selectChannel(ch) {
