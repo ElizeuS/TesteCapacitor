@@ -1,87 +1,91 @@
-ion-content{
+ion-content {
   --ion-background-color: #000000 !important;
   position: relative;
   top: 5px;
   left: 2px;
-
-  }
-
-  .TTT{
-    align-content: center;
-  }
-
-  .texts{
-    color:white;
-  }
-
-  .card-top2{
-    width: 100%;
-    padding: 0px;
-    margin: 0px;
-    margin-top: 10px;
-    border-style: none;
-    align-content: top;
-    background-color: #000000;
-    border-radius: 0%;
 }
 
-  .card-color{
-    // background-color: rgb(105, 0, 0);
-     width: 40%;
-     float: left;
-     height: 120px;
-     padding-top: 0px;
-     padding-bottom: 0px;
-     background-color: #ff0000;
-     //margin-top: 20px;
-     border-radius: 0%;
-    // margin: 0px;
-    left: 0px;
-    top: 0px;
- }
 
- .ion-header{
-   padding: 0%;
- }
 
- #containerSensogramaAIM{
-   display: none;
- }
-
- ion-col{
-  padding-top:0px;
-  padding-bottom:0px;
-  padding-left:0px;
-  padding-right:0px;
+.TTT {
+  align-content: center;
 }
 
-.waveletValue{
+.texts {
+  color: white;
+}
+
+.card-top2 {
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  margin-top: 10px;
+  border-style: none;
+  align-content: top;
+  background-color: #000000;
+  border-radius: 0%;
+}
+
+.card-color {
+  // background-color: rgb(105, 0, 0);
+  width: 40%;
+  //float: left;
+  height: 120px;
+
+  background-color: #ff0000;
+  //margin-top: 20px;
+  border-radius: 0%;
+  // margin: 0px;
+
+  top: 0px;
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+}
+
+.ion-header {
+  padding: 0%;
+}
+
+#containerSensogramaAIM {
+  display: none;
+}
+
+ion-col {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.waveletValue {
   color: white;
   padding: 0px;
   margin: 0%;
 }
 
-#knob{
+#knob {
   padding-bottom: 0px;
   padding-top: 0px;
 }
 
-#advancedMode{
+#advancedMode {
   display: none;
 }
-#advancedMode2{
+#advancedMode2 {
   display: none;
 }
-#advancedMode3{
+#advancedMode3 {
   display: none;
 }
-#advancedMode4{
+#advancedMode4 {
   display: none;
 }
-#advancedMode5{
+#advancedMode5 {
   display: none;
 }
 
-.channel-seletor{
+.channel-seletor {
   color: white;
 }

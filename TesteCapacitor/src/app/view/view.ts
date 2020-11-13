@@ -116,6 +116,8 @@ export class View {
           text: "Reflexivity",
           style: { color: "#ffffff" },
         },
+        max: 1.1,
+        min: 0.7,
       },
       xAxis: {
         title: {
@@ -902,7 +904,7 @@ export class View {
   downloadFiles() {
     let actualyTime = this.downloadReferences("Wet");
 
-    this.saveValues(
+    /* this.saveValues(
       this.cameraService.currentRedV, //VALORES ATUAIS
       "actualyDataR_" + actualyTime
     );
@@ -966,7 +968,7 @@ export class View {
     this.saveValues(
       this.cameraService.indicesGraphicBMean,
       "curvaAIMBMean_" + actualyTime
-    );
+    ); */
   }
 
   selectChannel(ch) {

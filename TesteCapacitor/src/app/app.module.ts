@@ -15,10 +15,13 @@ import { File } from '@ionic-native/file/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import * as Jimp from "jimp";
 
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { Brightness } from '@ionic-native/brightness/ngx'
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, NgxSliderModule,],
   providers: [
     StatusBar,
     CameraPreview,
@@ -27,6 +30,7 @@ import * as Jimp from "jimp";
     File,
     Geolocation,
     Jimp,
+    Brightness,
 
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

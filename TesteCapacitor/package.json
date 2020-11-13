@@ -13,6 +13,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-slider/ngx-slider": "^2.0.3",
     "@angular/common": "~7.1.4",
     "@angular/core": "~7.1.4",
     "@angular/forms": "~7.1.4",
@@ -21,6 +22,7 @@
     "@angular/platform-browser-dynamic": "~7.1.4",
     "@angular/router": "~7.1.4",
     "@ionic-native/background-mode": "^5.27.0",
+    "@ionic-native/brightness": "^5.29.0",
     "@ionic-native/camera-preview": "^5.27.0",
     "@ionic-native/core": "5.0.0-beta.21",
     "@ionic-native/file": "^5.27.0",
@@ -31,6 +33,7 @@
     "@types/highcharts": "^5.0.44",
     "clovelced-plugin-audiomanagement": "^1.0.2",
     "cordova-android": "7.1.4",
+    "cordova-plugin-brightness": "^0.2.0",
     "cordova-plugin-camera-preview": "^0.10.0",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-file": "^6.0.2",
@@ -91,7 +94,8 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-file": {},
       "clovelced-plugin-audiomanagement": {},
-      "cordova-plugin-geolocation": {}
+      "cordova-plugin-geolocation": {},
+      "cordova-plugin-brightness": {}
     },
     "platforms": [
       "android"

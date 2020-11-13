@@ -81,7 +81,7 @@ export class CameraService {
   private _pictureOpts: CameraPreviewPictureOptions = {
     width: 400,
     height: 400,
-    quality: 100, //0=max compression, 100=max quality
+    quality: 35, //0=max compression, 100=max quality
   };
 
   private _cameraPreviewOpts: CameraPreviewOptions = {
@@ -98,6 +98,7 @@ export class CameraService {
 
   async startCamera() {
     this.picture = null;
+
     this._cameraPreview.startCamera(this._cameraPreviewOpts).then(
       () => {
         this.takePicture();
@@ -107,6 +108,7 @@ export class CameraService {
       }
     );
   }
+
 
   async stopCamera() {
     this._cameraPreview.stopCamera();
@@ -140,6 +142,7 @@ export class CameraService {
       .catch((err) => {
         alert(err);
       });
+
   }
 
   async scanImage(image: Jimp, width: number, height: number) {
