@@ -4,16 +4,16 @@
 <script src="https://code.highcharts.com/modules/offline-exporting.js"></script> -->
 
 
-            <ion-header class="ion-header">
+            <ion-header class="ion-header"><!--
                 <script src="https://code.highcharts.com/8.0.3/highcharts.js"></script>
                 <script src="https://code.highcharts.com/8.0.3/modules/exporting.js"></script>
-                <script src="https://code.highcharts.com/8.0.3/highcharts-more.js"></script>
+                <script src="https://code.highcharts.com/8.0.3/highcharts-more.js"></script> -->
                 <ion-card class="card-top2">
-                    <ion-card-header class="card-color" id="card-color">
-                    </ion-card-header>
+                    <!-- <ion-card-header class="card-color" id="card-color"></ion-card-header> -->
+                    <app-drag-light [height]="heightLigth" [width]="widthLigth" ></app-drag-light>
                 </ion-card>
                 <!-- CARD DO RANGE KNOB -->
-                <ion-card class="card-top2">
+                <ion-card class="card-top">
                     <ion-range min="380" max="781" step="1" (ionChange)="corEvento($event)" value="670" mode="md"
                         id="knob" snaps="true"></ion-range>
                     <p class="waveletValue" text-center>
@@ -22,6 +22,7 @@
                 </ion-card>
             </ion-header>
             <ion-content>
+
                 <div id="containerAIM"></div>
                 <div id="containerSensogramaAIM"></div>
                 <ion-segment [(ngModel)]="segment" bottom color="Primary" mode="md">
@@ -88,7 +89,7 @@
                             </ion-fab>
                         </ion-col>
                         <ion-col class="ion-align-self-start">
-                            <ion-fab-button color="light" size="small" (click)="ligthCardPosition()" id="advancedMode4">
+                            <ion-fab-button color="light" size="small" (click)="cardSize()" id="advancedMode4">
                                 <ion-icon name="bulb"></ion-icon>
                             </ion-fab-button>
                         </ion-col>

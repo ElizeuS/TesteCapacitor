@@ -17,6 +17,8 @@ import { Geolocation } from "@ionic-native/geolocation/ngx";
   styleUrls: ["view.scss"],
 })
 export class View {
+  heightLigth = 100;
+  widthLigth = 140;
   charData: any;
   graficoAIM: any;
   sensogramaAIM: any;
@@ -337,11 +339,11 @@ export class View {
   async chartCurve() {}
 
   ngDoCheck() {
-    let teste = document.getElementById("card-color");
+   /*  let teste = document.getElementById("card-color");
     let r = this.cameraService.r;
     let g = this.cameraService.g;
     let b = this.cameraService.b;
-    teste.style.backgroundColor = `rgb(${r},${g}, ${b})`;
+    teste.style.backgroundColor = `rgb(${r},${g}, ${b})`; */
 
     //this.sensogramaAIM.series[0].setData(this.cameraService.minimoHunter);//TESTANDO
     // getHighChartData.series[0].
@@ -780,10 +782,15 @@ export class View {
         {
           text: "Save",
           handler: (data) => {
-            let valorTamanho = document.getElementById("card-color");
+            //let valorTamanho = document.getElementById("card-color");
             let tAltura = data.height;
             let tLargura = data.width;
-            valorTamanho.style.width = `${tLargura}px`;
+
+            this.heightLigth = data.height;
+            this.widthLigth = data.width;
+
+
+            /* valorTamanho.style.width = `${tLargura}px`;
             valorTamanho.style.height = `${tAltura}px`;
 
             console.log(position);
@@ -797,7 +804,7 @@ export class View {
               valorTamanho.style.marginRight = "auto";
               valorTamanho.style.marginTop = "0";
               valorTamanho.style.paddingTop = "0px";
-            }
+            } */
           },
         },
       ],

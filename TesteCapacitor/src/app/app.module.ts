@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -18,6 +19,8 @@ import * as Jimp from "jimp";
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { Brightness } from '@ionic-native/brightness/ngx'
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -31,6 +34,7 @@ import { Brightness } from '@ionic-native/brightness/ngx'
     Geolocation,
     Jimp,
     Brightness,
+    BrowserAnimationsModule,
 
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

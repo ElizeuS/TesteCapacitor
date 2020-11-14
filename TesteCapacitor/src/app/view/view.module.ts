@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -10,16 +11,8 @@ import { BrightScrollComponent } from '../components/bright-scroll/bright-scroll
 
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
-//import exporting from 'highcharts/modules/exporting.src.js';
+import { DragLightComponent } from '../components/drag-light/drag-light.component';
 
-// import * as Highcharts from 'highcharts';
-// // Alternatively, this is how to load Highstock. Highmaps is similar.
-// // import Highcharts from 'highcharts/highstock';
-
-// // Load the exporting module.
-// import Exporting from 'highcharts/modules/exporting.src.js';
-//  // Initialize exporting module.
-//  //Exporting(Highcharts);
 
 @NgModule({
   imports: [
@@ -28,10 +21,11 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     FormsModule,
     RouterModule.forChild([{ path: '', component: View }]),
     SharedModule,
-    NgxSliderModule
+    NgxSliderModule,
+    DragDropModule
 
   ],
-  declarations: [View, BrightScrollComponent]
+  declarations: [View, BrightScrollComponent, DragLightComponent]
 })
 export class ViewModule {
 
