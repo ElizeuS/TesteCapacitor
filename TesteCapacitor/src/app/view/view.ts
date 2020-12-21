@@ -1,5 +1,5 @@
+import { CameraService } from 'src/app/services/camera.service';
 import { Component, SimpleChange, ViewChild } from "@angular/core";
-import { CameraService } from "../services/camera.service";
 import * as Highcharts from "highcharts";
 import * as $ from "jquery";
 import { TabsPage } from "../tabs/tabs.page";
@@ -486,40 +486,7 @@ export class View {
       );
       this.sensogramaAIM.series[2].setData(this.sensogramaService.indicesWidth);
     }
-    //this.graficoAIM.series[0].setData(this.cameraService.indicesGraphic); //Adiciona os valores no gráfico do sensograma da tab View
 
-    //this.graficoAIM.series[1].setData(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell)); //plotando os valores de referência
-
-    //Chamada dos métodos de implementção dos valores dos sensogramas
-
-    // DESCOMENTAR this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimo);
-    /*     try {
-          if (this.channel == 0) {
-            this.sensogramaAIM.series[0].setData(
-              this.sensogramaService.indicesMinimoR
-            );
-          } else if (this.channel == 1) {
-            this.sensogramaAIM.series[0].setData(
-              this.sensogramaService.indicesMinimoG
-            );
-          } else if (this.channel == 2) {
-            this.sensogramaAIM.series[0].setData(
-              this.sensogramaService.indicesMinimoB
-            );
-          } else {
-            this.sensogramaAIM.series[0].setData(
-              this.sensogramaService.indicesMinimoR
-            );
-          }
-          //this.sensogramaAIM.series[0].setData(this.sensogramaService.indicesMinimoR);
-          this.sensogramaAIM.series[1].setData(
-            this.cameraService.indicesAssimetry
-          );
-          this.sensogramaAIM.series[2].setData(this.cameraService.indicesWidth);
-        } catch (error) {
-          // alert(error)
-
-        } */
   }
   ngOnInit() {
     this.chartAIM(); //Essa função está sendo inicializada assim que o aplicativo começa a ser executado
@@ -539,7 +506,9 @@ export class View {
     // this.cameraService.stopCamera();
   }
 
-  //aimShow() Exibe a div do gráfico AIM e oculta a div do gráfico Sensograma e o processo contrário
+  /**
+   * @method aimShow() Exibe a div do gráfico AIM e oculta a div do gráfico Sensograma e o processo contrário
+   * */
   async aimShow() {
     console.log(this.segment);
     let sensog = document.getElementById("containerSensogramaAIM");
@@ -895,48 +864,34 @@ export class View {
     let currentdate = new Date();
     let actualyTime =
       currentdate.getDate() +
-      "-" +
-      (currentdate.getMonth() + 1) +
-      "-" +
-      currentdate.getFullYear() +
-      "-" +
+      "_" +
       currentdate.getHours() +
-      "-" +
+      "_" +
       currentdate.getMinutes() +
-      "-" +
+      "_" +
       currentdate.getSeconds();
 
     let R = this.cameraService.globalCHannelRed;
     let G = this.cameraService.globalCHannelGreen;
     let B = this.cameraService.globalCHannelBlue;
-    const canais = {
+    const arrayChannels = {
         "ChannelRefR" : R,
         "ChannelRefG" : G,
-        "ChannelRefB" : B
+        "ChannelRefB" : B,
+        "Reference": ref,
+        "Format": "Matriz: NxM",
+        "actualyDataR" : this.cameraService.currentRedV,
+        "actualyDataG" : this.cameraService.currentGreenV,
+        "actualyDataB" : this.cameraService.currentBlueV
     };
 
-    try {
-      this.saveDryCellAnCurrentIndices(
-        this.cameraService.globalCHannelRed,
-        "ChannelRefR_" + ref + "_" + actualyTime
-      );
-      this.saveDryCellAnCurrentIndices(
-        this.cameraService.globalCHannelGreen,
-        "ChannelRefG_" + ref + "_" + actualyTime
-      );
-      this.saveDryCellAnCurrentIndices(
-        this.cameraService.globalCHannelBlue,
-        "ChannelRefB_" + ref + "_" + actualyTime
-      );
 
-      this.writeJson(canais, "Nome"+"");
-      //this.writeFile(data, "tuts");
+    try {
+      this.writeJson(arrayChannels, "arrayChannels_"+actualyTime);
 
     } catch (error) {
       alert(error)
     }
-
-    alert(actualyTime);
 
     return actualyTime;
   }
@@ -944,75 +899,30 @@ export class View {
   downloadFiles() {
     let actualyTime = this.downloadReferences("Wet");
 
-    /* this.saveValues(
-      this.cameraService.currentRedV, //VALORES ATUAIS
-      "actualyDataR_" + actualyTime
-    );
+    let sensogramValues = {
+      "Reference" : "Sensograma",
+      "minValuesR" : this.sensogramaService.indicesMinimoR,
+      "minValuesG" : this.sensogramaService.indicesMinimoG,
+      "minValuesB" : this.sensogramaService.indicesMinimoB
+    };
 
-    this.saveValues(
-      this.sensogramaService.indicesMinimoR,
-      "minValuesR_" + actualyTime
-    );
-    this.saveValues(
-      this.sensogramaService.indicesMinimoG,
-      "minValuesG_" + actualyTime
-    );
-    this.saveValues(
-      this.sensogramaService.indicesMinimoB,
-      "minValuesB_" + actualyTime
-    );
-    this.saveValues(
-      this.cameraService._currentIndicesDryCell,
-      "dryCell_" + actualyTime
-    );
-    this.saveValues(
-      this.cameraService._currentIndicesDryCellG,
-      "dryCellG_" + actualyTime
-    );
-    this.saveValues(
-      this.cameraService._currentIndicesDryCellB,
-      "dryCellB_" + actualyTime
-    );
-    this.saveValues(
-      this.cameraService.indicesGraphic,
-      "curvaAIM_" + actualyTime
-    );
-    this.saveValues(
-      this.cameraService.indicesGraphicG,
-      "curvaAIMG_" + actualyTime
-    );
-    this.saveValues(
-      this.cameraService.indicesGraphicB,
-      "curvaAIMB_" + actualyTime
-    );
-    this.saveValues(
-      this.cameraService.indicesGraphicRMedian,
-      "curvaAIMRMedian_" + actualyTime
-    );
-    this.saveValues(
-      this.cameraService.indicesGraphicGMedian,
-      "curvaAIMGMedian_" + actualyTime
-    );
-    this.saveValues(
-      this.cameraService.indicesGraphicBMedian,
-      "curvaAIMBMedian_" + actualyTime
-    );
-    this.saveValues(
-      this.cameraService.indicesGraphicRMean,
-      "curvaAIMRMean_" + actualyTime
-    );
-    this.saveValues(
-      this.cameraService.indicesGraphicGMean,
-      "curvaAIMGMean_" + actualyTime
-    );
-    this.saveValues(
-      this.cameraService.indicesGraphicBMean,
-      "curvaAIMBMean_" + actualyTime
-    ); */
-  }
+    let aimValues = {
+      "dryCellR" : this.cameraService._currentIndicesDryCell,
+      "dryCellG" : this.cameraService._currentIndicesDryCellG,
+      "dryCellB" : this.cameraService._currentIndicesDryCellB,
+      "curvaAIMR" : this.cameraService.indicesGraphic,
+      "curvaAIMG" : this.cameraService.indicesGraphicG,
+      "curvaAIMB" : this.cameraService.indicesGraphicB,
+      "curvaAIMRMedian" : this.cameraService.indicesGraphicRMedian,
+      "curvaAIMGMedian" : this.cameraService.indicesGraphicGMedian,
+      "curvaAIMBMedian" : this.cameraService.indicesGraphicBMedian,
+      "curvaAIMRMean" : this.cameraService.indicesGraphicRMean,
+      "curvaAIMGMean" : this.cameraService.indicesGraphicGMean,
+      "curvaAIMBMean" : this.cameraService.indicesGraphicBMean
+    };
 
-  removeUndefined(a : number[]) {
-    return a.filter(Number);
+    this.writeJson(sensogramValues, "sensogramValues_"+actualyTime);
+    this.writeJson(aimValues, "aimValues_"+actualyTime);
   }
 
   selectChannel(ch) {
