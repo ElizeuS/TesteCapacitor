@@ -101,7 +101,7 @@ export class CameraService {
 
     this._cameraPreview.startCamera(this._cameraPreviewOpts).then(
       () => {
-        this.takePicture();
+        this.myTakePicture();
       },
       (error) => {
         alert(error);
@@ -114,7 +114,7 @@ export class CameraService {
     this._cameraPreview.stopCamera();
   }
 
-  async takePicture() {
+  async myTakePicture() {
     this._cameraPreview.takePicture(this._pictureOpts).then((imageData) => {
       this.picture = "data:image/jpeg;base64," + imageData;
       this.code = imageData;
@@ -136,7 +136,7 @@ export class CameraService {
         this.myImage = image;
 
         this.scanImage(this.myImage, width, height).then(() =>
-          this.takePicture()
+          this.myTakePicture()
         );
       })
       .catch((err) => {
@@ -146,16 +146,16 @@ export class CameraService {
   }
 
   async scanImage(image: Jimp, width: number, height: number) {
-    let sRed = new Array(width + 1).join("0").split("").map(parseFloat);
+    let sRed = new Array((width + 1)).join("0").split("").map(parseFloat);
 
-    let sGreen = new Array(width + 1).join("0").split("").map(parseFloat);
-    let sBlue = new Array(width + 1).join("0").split("").map(parseFloat);
+    let sGreen = new Array((width + 1)).join("0").split("").map(parseFloat);
+    let sBlue = new Array((width + 1)).join("0").split("").map(parseFloat);
     this.nColumns = width;
     this.nLines = height;
     this.globalCHannelRed = [];
     this.globalCHannelGreen = [];
     this.globalCHannelBlue = [];
-    for (let line = 0; line < height; line++) {
+    for (let line = 0; line < Math.round((height*0.5)); line++) {
       for (let column = 0; column < width; column++) {
         sRed[column] += Jimp.intToRGBA(image.getPixelColor(column, line)).r;
         sGreen[column] += Jimp.intToRGBA(image.getPixelColor(column, line)).g;

@@ -101,6 +101,22 @@ export class View {
     );
   }
 
+  writeJson(something : any, filename : string) {
+    let str = JSON.stringify(something);
+    let bytes = new TextEncoder().encode(str);
+    let blob = new Blob([bytes], {
+        type: "application/json;charset=utf-8"
+    });
+
+    this.file.writeFile(
+      this.file.externalDataDirectory,
+      filename + ".json",
+      blob,
+      { replace : true, append : false }
+    );
+  }
+
+
   async chartAIM() {
     this.graficoAIM = Highcharts.chart("containerAIM", {
       chart: {
@@ -332,8 +348,8 @@ export class View {
   }
 
   ngOnChanges(changes: SimpleChange) {
-    console.log(changes);
-    console.log(this.charData.series[0].name + " NAME");
+    /* console.log(changes);
+    console.log(this.charData.series[0].name + " NAME"); */
   }
 
   async chartCurve() {}
@@ -502,6 +518,7 @@ export class View {
           this.sensogramaAIM.series[2].setData(this.cameraService.indicesWidth);
         } catch (error) {
           // alert(error)
+
         } */
   }
   ngOnInit() {
@@ -768,10 +785,12 @@ export class View {
         {
           name: "height",
           placeholder: "height: [100] base value",
+          type: "number",
         },
         {
           name: "width",
           placeholder: "width: [140] base value",
+          type: "number",
         },
       ],
       buttons: [
@@ -886,6 +905,16 @@ export class View {
       currentdate.getMinutes() +
       "-" +
       currentdate.getSeconds();
+
+    let R = this.cameraService.globalCHannelRed;
+    let G = this.cameraService.globalCHannelGreen;
+    let B = this.cameraService.globalCHannelBlue;
+    const canais = {
+        "ChannelRefR" : R,
+        "ChannelRefG" : G,
+        "ChannelRefB" : B
+    };
+
     try {
       this.saveDryCellAnCurrentIndices(
         this.cameraService.globalCHannelRed,
@@ -899,6 +928,10 @@ export class View {
         this.cameraService.globalCHannelBlue,
         "ChannelRefB_" + ref + "_" + actualyTime
       );
+
+      this.writeJson(canais, "Nome"+"");
+      //this.writeFile(data, "tuts");
+
     } catch (error) {
       alert(error)
     }
@@ -976,6 +1009,10 @@ export class View {
       this.cameraService.indicesGraphicBMean,
       "curvaAIMBMean_" + actualyTime
     ); */
+  }
+
+  removeUndefined(a : number[]) {
+    return a.filter(Number);
   }
 
   selectChannel(ch) {
