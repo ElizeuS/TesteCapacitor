@@ -20,7 +20,6 @@ export class TabsPage {
 
   }
 
-
   cor(comprimentoDeOnda) {
 
     this.comprimentoDeOn = comprimentoDeOnda;
@@ -80,8 +79,6 @@ export class TabsPage {
     g = Math.floor(SSS * green);
     b = Math.floor(SSS * blue);
 
-    //let teste = document.getElementById("card-color");
-    //teste.style.backgroundColor = `rgb(${r},${g}, ${b})`;
     this.setColor(r, g, b);
     this.cameraService.r = r;
     this.cameraService.g = g;
@@ -121,6 +118,4 @@ export class TabsPage {
     button4.style.display = "none";
     button5.style.display = "none";
   }
-
-
 }

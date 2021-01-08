@@ -35,7 +35,6 @@ export class CameraService {
 
   nColumns: number;
   nLines: number;
-  //testRadioOpen: any; //variavel do Radio para dialogo
   picture: string;
 
   _currentIndicesDryCell: number[] = [];
@@ -90,10 +89,8 @@ export class CameraService {
     width: 70,
     height: 70,
     tapPhoto: true,
-    //camera: this._cameraPreview.CAMERA_DIRECTION.FRONT,
     previewDrag: true,
     toBack: false,
-    //alpha: 1
   };
 
   async startCamera() {
@@ -167,11 +164,7 @@ export class CameraService {
 
       }
     }
-    /*
-    2  3  4
-    5  6  7
-    8  9  10
-    */
+
     this.currentRedV = await sRed.map(function (value) {
       return value / width;
     });

@@ -49,18 +49,14 @@ export class View {
 
     this.compri = 670;
     console.log(this.cameraService.comp);
-    //this.graficoAIM.series[0].setData(this.cameraService._indicesGraphic);
-    //this.tabsPage.setColor(255, 0, 0);
 
     this.channel = 0; //0 = RED, 1 = GREEN, 2 = BLUE
 
     this.geolocation
       .getCurrentPosition()
       .then((resp) => {
-        //alert(resp.coords.latitude +" "+ resp.coords.longitude);
         this.latitude = "" + resp.coords.latitude;
         this.longitude = "" + resp.coords.longitude;
-        // resp.coords.longitude
       })
       .catch((error) => {
         console.log("Error getting location", error);
@@ -86,21 +82,10 @@ export class View {
   }
 
   /**
-   * Função para escrever em um arquivo denominado de filename.txt,
-   * Esse arquivo é salvo na pasta file do diretorio da aplicação denominado de 'files'
+   * @method writeFile() Função para escrever @param {any} something em um arquivo denominado @param {string} filename .txt.
+   * Esse arquivo é salvo na no formato JSON na pasta /file do diretorio da aplicação denominado de 'files'
    * o diretorio é /storage/Android/data/io.ionic/started/files/filename.txt.
    */
-  writeFile(something: any, filename: string) {
-    this.blob = new Blob(something);
-
-    this.file.writeFile(
-      this.file.externalDataDirectory,
-      filename + ".txt",
-      this.blob,
-      { replace: true, append: false }
-    );
-  }
-
   writeJson(something : any, filename : string) {
     let str = JSON.stringify(something);
     let bytes = new TextEncoder().encode(str);
@@ -115,7 +100,6 @@ export class View {
       { replace : true, append : false }
     );
   }
-
 
   async chartAIM() {
     this.graficoAIM = Highcharts.chart("containerAIM", {
@@ -348,23 +332,12 @@ export class View {
   }
 
   ngOnChanges(changes: SimpleChange) {
-    /* console.log(changes);
-    console.log(this.charData.series[0].name + " NAME"); */
   }
 
   async chartCurve() {}
 
   ngDoCheck() {
-   /*  let teste = document.getElementById("card-color");
-    let r = this.cameraService.r;
-    let g = this.cameraService.g;
-    let b = this.cameraService.b;
-    teste.style.backgroundColor = `rgb(${r},${g}, ${b})`; */
 
-    //this.sensogramaAIM.series[0].setData(this.cameraService.minimoHunter);//TESTANDO
-    // getHighChartData.series[0].
-
-    // setData(this.cameraService.indicesGraphic); #DEFASADO
     if (this.channel == 0) {
       this.minimoCH = this.sensogramaService.minimoR;
     } else if (this.channel == 1) {
@@ -481,18 +454,18 @@ export class View {
     } catch (error) {
       //alert(error)
     } finally {
+      //Adicionando os valores de Assimetria ao gráfico
       this.sensogramaAIM.series[1].setData(
         this.sensogramaService.indicesAssimetry
       );
+      //Adicionando os valores de Largura ao gráfico
       this.sensogramaAIM.series[2].setData(this.sensogramaService.indicesWidth);
     }
-
   }
+
   ngOnInit() {
     this.chartAIM(); //Essa função está sendo inicializada assim que o aplicativo começa a ser executado
-
     this.sensogramaChart();
-    //this.graficoAIM.series[0].setData(this.cameraService._indicesGraphic);
   }
 
   hideShowCam() {
@@ -502,8 +475,6 @@ export class View {
   calibraDryCell() {
     this.cameraService.dry();
     this.downloadReferences("Dry");
-
-    // this.cameraService.stopCamera();
   }
 
   /**
@@ -522,23 +493,17 @@ export class View {
       sensog.style.display = "block";
     }
   }
-  //Faz o inverso da aimShow()
-  /*sensogramaShow() {
-        let senso = document.getElementById("containerSensogramaAIM");
-        let aim = document.getElementById("containerAIM");
-        aim.style.display = "none";
-        senso.style.display = "block";
-    }*/
 
+  /**
+   * @method clear() este método limpa os valores dos sensogramas de mínimo, assimetria e largura.
+   * */
   clear() {
-    //alert(this.cameraService.indicesMin);
-    this.sensogramaService.indicesMinimoR = []; //Apaga os valores do gráfico do sensograma
+    this.sensogramaService.indicesMinimoR = [];
     this.sensogramaService.indicesMinimoG = [];
     this.sensogramaService.indicesMinimoB = [];
 
     this.sensogramaService.indicesAssimetry = [];
     this.sensogramaService.indicesWidth = [];
-    //console.log(this.cameraService.normalizacao(this.cameraService._currentIndicesDryCell));
   }
 
   public corEvento(comprimentoDeOnda) {
@@ -547,7 +512,6 @@ export class View {
     else this.comprimento_deOnda = comprimentoDeOnda.detail.value;
 
     this.cameraService.comp = comprimentoDeOnda.detail.value;
-    //console.log(comprimentoDeOnda.detail.value);
     this.tabsPage.cor(this.cameraService.comp);
     this.compri = this.tabsPage.comprimentoDeOn;
   }
@@ -582,7 +546,6 @@ export class View {
         {
           text: "Ok",
           handler: (data) => {
-            //this.testRadioOpen = false;
 
             if (data == "median") {
               this.cameraService.smoothinMode = 1;
@@ -591,7 +554,6 @@ export class View {
               this.cameraService.smoothinMode = 2;
               this.windowDialog();
             }
-            console.log(data);
             console.log("Confirm Ok");
           },
         },
@@ -623,9 +585,7 @@ export class View {
           text: "Save",
           handler: (data) => {
             console.log("Executar o metodo aqui!!!");
-            //alert(data.windows);
             this.cameraService.windowsValue = data.windows;
-            //this.data = data.mediana;
           },
         },
       ],
@@ -669,7 +629,6 @@ export class View {
         {
           text: "Ok",
           handler: (data) => {
-            //this.testRadioOpen = false;
 
             if (data == "hunter") {
               this.cameraService.choiseMinCS = 1;
@@ -744,9 +703,10 @@ export class View {
     await alert.present();
   }
 
-  //MÉTODO RESPONSÁVEL POR APLICAR AS MUDANÇAS DE TAMANHO D CARD DE FONTE DE LUZ
+  /**
+   * @method cardSize() função responsável por redimensionar a fonte de luz.
+    **/
   async cardSize(position: String) {
-    //console.log("A função está sendo chamada");
 
     let alert = await this.alertCtrl.create({
       header: "Dimensions of the Light Source",
@@ -770,29 +730,11 @@ export class View {
         {
           text: "Save",
           handler: (data) => {
-            //let valorTamanho = document.getElementById("card-color");
             let tAltura = data.height;
             let tLargura = data.width;
 
             this.heightLigth = data.height;
             this.widthLigth = data.width;
-
-
-            /* valorTamanho.style.width = `${tLargura}px`;
-            valorTamanho.style.height = `${tAltura}px`;
-
-            console.log(position);
-
-            if (position == "left" || position == "right") {
-              valorTamanho.style.cssFloat = String(position);
-              valorTamanho.style.paddingTop = "0px";
-            } else {
-              valorTamanho.style.cssFloat = "none";
-              valorTamanho.style.marginLeft = "auto";
-              valorTamanho.style.marginRight = "auto";
-              valorTamanho.style.marginTop = "0";
-              valorTamanho.style.paddingTop = "0px";
-            } */
           },
         },
       ],
@@ -805,10 +747,8 @@ export class View {
     let bar = document.getElementById("knob");
     if (bar.style.display == "none") {
       bar.style.display = "block";
-      // $('ion-range').hide();
     } else {
       bar.style.display = "none";
-      //$('ion-range').show()
     }
   }
 
@@ -820,44 +760,6 @@ export class View {
     valuesWithBreak.push("Lat " + this.latitude + " ");
     valuesWithBreak.push("Long " + this.longitude);
     return valuesWithBreak;
-  }
-
-  breakTextArray(numbers: [], nColumns, nLines) {
-    let valuesWithBreak = [];
-    let valuesString = "";
-
-    let aux = 0;
-    for (let cont = 0; cont < nColumns * nLines; cont++) {
-      if (aux == nColumns - 1) {
-        valuesWithBreak.push(numbers[cont] + ",\n");
-        //valuesString += numbers[cont] + ",\n";
-        aux = 0;
-      } else {
-        valuesWithBreak.push(numbers[cont] + ",");
-        //valuesString += numbers[cont] + ", ";
-        aux += 1;
-      }
-    }
-    return valuesWithBreak;
-  }
-
-  saveValues(values: any, filename: string) {
-    let btValues = this.breakText(values);
-    this.writeFile(btValues, filename);
-  }
-
-  saveDryCellAnCurrentIndices(values: any, filename: string) {
-    let btValues = this.breakTextArray(
-      values,
-      this.cameraService.nColumns,
-      this.cameraService.nLines
-    );
-    this.writeFile(btValues, filename);
-  }
-
-  saveAimIndices(values: any, filename: string) {
-    let btValues = this.breakText(values);
-    this.writeFile(btValues, filename);
   }
 
   downloadReferences(ref: string) {
@@ -884,7 +786,6 @@ export class View {
         "actualyDataG" : this.cameraService.currentGreenV,
         "actualyDataB" : this.cameraService.currentBlueV
     };
-
 
     try {
       this.writeJson(arrayChannels, "arrayChannels_"+actualyTime);
@@ -921,8 +822,12 @@ export class View {
       "curvaAIMBMean" : this.cameraService.indicesGraphicBMean
     };
 
-    this.writeJson(sensogramValues, "sensogramValues_"+actualyTime);
-    this.writeJson(aimValues, "aimValues_"+actualyTime);
+    try {
+      this.writeJson(sensogramValues, "sensogramValues_"+actualyTime);
+      this.writeJson(aimValues, "aimValues_"+actualyTime);
+    } catch (error) {
+      alert(error);
+    }
   }
 
   selectChannel(ch) {

@@ -1,117 +1,110 @@
+<ion-header class="ion-header">
+    <ion-card class="card-top2">
+        <app-drag-light [height]="heightLigth" [width]="widthLigth"></app-drag-light>
+    </ion-card>
+    <!-- CARD DO RANGE KNOB -->
+    <ion-card class="card-top">
+        <ion-range min="380" max="781" step="1" (ionChange)="corEvento($event)" value="670" mode="md" id="knob"
+            snaps="true"></ion-range>
+        <p class="waveletValue" text-center>
+            <b id="wv"> λ = {{ compri }} <i>nm</i></b>
+        </p>
+    </ion-card>
+</ion-header>
+<ion-content>
 
-            <ion-header class="ion-header"><!--
-                <script src="https://code.highcharts.com/8.0.3/highcharts.js"></script>
-                <script src="https://code.highcharts.com/8.0.3/modules/exporting.js"></script>
-                <script src="https://code.highcharts.com/8.0.3/highcharts-more.js"></script> -->
-                <ion-card class="card-top2">
-                    <!-- <ion-card-header class="card-color" id="card-color"></ion-card-header> -->
-                    <app-drag-light [height]="heightLigth" [width]="widthLigth" ></app-drag-light>
-                </ion-card>
-                <!-- CARD DO RANGE KNOB -->
-                <ion-card class="card-top">
-                    <ion-range min="380" max="781" step="1" (ionChange)="corEvento($event)" value="670" mode="md"
-                        id="knob" snaps="true"></ion-range>
-                    <p class="waveletValue" text-center>
-                        <b id="wv"> λ = {{ compri }} <i>nm</i></b>
-                    </p>
-                </ion-card>
-            </ion-header>
-            <ion-content>
+    <div id="containerAIM"></div>
+    <div id="containerSensogramaAIM"></div>
+    <ion-segment [(ngModel)]="segment" bottom color="Primary" mode="md">
+        <ion-segment-button value="aim" (click)="aimShow()">
+            <ion-label class="texts">SPR</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="sensogram" (click)="aimShow()">
+            <ion-label class="texts">Sensogram</ion-label>
+        </ion-segment-button>
+    </ion-segment>
 
-                <div id="containerAIM"></div>
-                <div id="containerSensogramaAIM"></div>
-                <ion-segment [(ngModel)]="segment" bottom color="Primary" mode="md">
-                    <ion-segment-button value="aim" (click)="aimShow()">
-                        <ion-label class="texts">SPR</ion-label>
-                    </ion-segment-button>
-                    <ion-segment-button value="sensogram" (click)="aimShow()">
-                        <ion-label class="texts">Sensogram</ion-label>
-                    </ion-segment-button>
-                </ion-segment>
+    <ion-grid class="texts">
+        <ion-row>
+            <ion-col>Assimetry</ion-col>
+            <ion-col>Min</ion-col>
+            <ion-col>Width</ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>{{assimetria}}</ion-col>
+            <ion-col>{{minimoCH}}</ion-col>
+            <ion-col>{{largura}}</ion-col>
+        </ion-row>
+        <ion-row>
+            <app-bright-scroll></app-bright-scroll>
+        </ion-row>
+    </ion-grid>
 
-                <ion-grid class="texts">
-                    <ion-row>
-                        <ion-col>Assimetry</ion-col>
-                        <ion-col>Min</ion-col>
-                        <ion-col>Width</ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col>{{assimetria}}</ion-col>
-                        <ion-col>{{minimoCH}}</ion-col>
-                        <ion-col>{{largura}}</ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col>
-                            <ion-fab horizontal="center">
-                                <ion-fab-button size="small" color="light" id="advancedMode5">
-                                    <ion-icon name="ios-color-filter"></ion-icon>
-                                </ion-fab-button>
-                                <ion-fab-list side="top">
-                                    <ion-fab-button color="success" (click)="selectChannel(1)">
-                                        <ion-label>G</ion-label>
-                                    </ion-fab-button>
-                                </ion-fab-list>
-                                <ion-fab-list side="end">
-                                    <ion-fab-button color="primary" (click)="selectChannel(2)">
-                                        <ion-label>B</ion-label>
-                                    </ion-fab-button>
-                                </ion-fab-list>
-                                <ion-fab-list side="start">
-                                    <ion-fab-button color="danger" (click)="selectChannel(0)">
-                                        <ion-label>R</ion-label>
-                                    </ion-fab-button>
-                                </ion-fab-list>
-                            </ion-fab>
-                        </ion-col>
-                        <app-bright-scroll></app-bright-scroll>
-                    </ion-row>
-                </ion-grid>
-
-            </ion-content>
-            <footer>
-                <ion-grid>
-                    <ion-row>
-                        <ion-col class="ion-align-self-start">
-                            <ion-fab>
-                                <ion-fab-button id="advancedMode" color="light" size="small">
-                                    <ion-icon name="pulse"></ion-icon>
-                                </ion-fab-button>
-                                <ion-icon name="analytics"></ion-icon>
-                                <ion-fab-list side="top">
-                                    <ion-fab-button (click)="minMethod()">Min</ion-fab-button>
-                                    <ion-fab-button (click)="smoothingMethod()">SM</ion-fab-button>
-                                </ion-fab-list>
-                            </ion-fab>
-                        </ion-col>
-                        <ion-col class="ion-align-self-start">
-                            <ion-fab-button color="light" size="small" (click)="cardSize()" id="advancedMode4">
-                                <ion-icon name="bulb"></ion-icon>
-                            </ion-fab-button>
-                        </ion-col>
-                        <ion-col class="ion-align-self-start">
-
-                            <ion-fab-button (click)="clickHide()" id="advancedMode3" color="light" size="small">
-                                <ion-icon name="md-color-filter"></ion-icon>
-                            </ion-fab-button>
-                        </ion-col>
-
-                        <ion-col class="ion-align-self-start">
-                            <ion-fab-button id="advancedMode2" color="light" size="small" (click)="hideShowCam()">
-                                <ion-icon name="camera"></ion-icon>
-                            </ion-fab-button>
-                        </ion-col>
-                        <ion-col class="ion-align-self-start">
-                            <ion-fab-button color="light" size="small" (click)=" downloadFiles()">
-                                <ion-icon name="download"></ion-icon>
-                            </ion-fab-button>
-                        </ion-col>
-                        <ion-col class="ion-align-self-start">
-                            <ion-fab-button color="light" size="small" (click)="calibraDryCell()">Dry</ion-fab-button>
-                        </ion-col>
-                        <ion-col class="ion-align-self-start">
-                            <ion-fab-button color="light" size="small" (click)="clear()">Clear</ion-fab-button>
-                        </ion-col>
-
-                    </ion-row>
-                </ion-grid>
-            </footer>
+</ion-content>
+<footer>
+    <ion-grid>
+        <ion-row>
+            <ion-col class="ion-align-self-start">
+                <ion-fab>
+                    <ion-fab-button id="advancedMode" color="light" size="small">
+                        <ion-icon name="pulse"></ion-icon>
+                    </ion-fab-button>
+                    <ion-icon name="analytics"></ion-icon>
+                    <ion-fab-list side="top">
+                        <ion-fab-button (click)="minMethod()">Min</ion-fab-button>
+                        <ion-fab-button (click)="smoothingMethod()">SM</ion-fab-button>
+                    </ion-fab-list>
+                </ion-fab>
+            </ion-col>
+            <ion-col class="ion-align-self-start">
+                <ion-fab>
+                    <ion-fab-button id="advancedMode2" color="light" size="small">
+                        <ion-icon name="eye"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-list side="top">
+                        <ion-fab-button color="light" size="small" (click)="cardSize()" id="advancedMode4">
+                            <ion-icon name="bulb"></ion-icon>
+                        </ion-fab-button>
+                        <ion-fab-button (click)="clickHide()" id="advancedMode3" color="light" size="small">
+                            <ion-icon name="md-color-filter"></ion-icon>
+                        </ion-fab-button>
+                    </ion-fab-list>
+                </ion-fab>
+            </ion-col>
+            <ion-col class="ion-align-self-start">
+                <ion-fab>
+                    <ion-fab-button size="small" color="light" id="advancedMode5">
+                        <ion-icon name="ios-color-filter"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-list side="top">
+                        <ion-fab-button color="success" (click)="selectChannel(1)">
+                            <ion-label>G</ion-label>
+                        </ion-fab-button>
+                        <ion-fab-button color="primary" (click)="selectChannel(2)">
+                            <ion-label>B</ion-label>
+                        </ion-fab-button>
+                        <ion-fab-button color="danger" (click)="selectChannel(0)">
+                            <ion-label>R</ion-label>
+                        </ion-fab-button>
+                    </ion-fab-list>
+                </ion-fab>
+            </ion-col>
+            <ion-col class="ion-align-self-start">
+                <ion-fab-button id="advancedMode2" color="light" size="small" (click)="hideShowCam()">
+                    <ion-icon name="camera"></ion-icon>
+                </ion-fab-button>
+            </ion-col>
+            <ion-col class="ion-align-self-start">
+                <ion-fab-button color="light" size="small" (click)=" downloadFiles()">
+                    <ion-icon name="download"></ion-icon>
+                </ion-fab-button>
+            </ion-col>
+            <ion-col class="ion-align-self-start">
+                <ion-fab-button color="light" size="small" (click)="calibraDryCell()">Dry</ion-fab-button>
+            </ion-col>
+            <ion-col class="ion-align-self-start">
+                <ion-fab-button color="light" size="small" (click)="clear()">Clear</ion-fab-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</footer>

@@ -1,16 +1,4 @@
  //---------------------------------------PARTE SUPERIOR------------------------------------------
-  //Card do conteúdo da cor
-  /*.card-color{
-    // background-color: rgb(105, 0, 0);
-     width: 50%;
-     height: 50px;
-     padding-top: 0px;
-     //margin-top: 20px;
-     border-radius: 0%;
-    // margin: 0px;
- }
-
- */
  //Barra de configuração de cor
  .ligth-bar{
      margin: 2px;
@@ -39,9 +27,6 @@
     box-shadow: 0;
     padding: 0px;
     border-style: none;
-   // margin: 0px;
-  
-
 }
 
 #card-top2{
@@ -67,7 +52,7 @@
     background-color: #000000;
     border-top-color: antiquewhite;
  }
- 
+
 
  //--------------------------------------------Fim--------------------------------------
 
@@ -78,7 +63,7 @@
    }
 
 //--------------------------------------FIM---------------------------------------------------------
- 
+
 ion-content{
    --ion-background-color: #000000 !important;
 }
