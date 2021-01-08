@@ -113,7 +113,7 @@ export class CameraService {
 
   async myTakePicture() {
     this._cameraPreview.takePicture(this._pictureOpts).then((imageData) => {
-      this.picture = "data:image/jpeg;base64," + imageData;
+      this.picture = "data:image/png;base64," + imageData;
       this.code = imageData;
       this.readImage(this._base64ToArrayBuffer(this.code));
     }),

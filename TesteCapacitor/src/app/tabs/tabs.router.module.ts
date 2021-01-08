@@ -13,7 +13,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../advanced/advanced.module#AdvancedModule'
+            loadChildren: ''
           }
         ]
       },
