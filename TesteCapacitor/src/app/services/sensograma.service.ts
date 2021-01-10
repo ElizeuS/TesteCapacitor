@@ -14,6 +14,10 @@ export class SensogramaService {
   largura: number;
   assimetria: number;
 
+  posCL: number = 0;
+  posCR: number = 0;
+  baseline: number = 0;
+
   indicesAssimetry: number[] = [];
   indicesWidth: number[] = []
 
@@ -51,17 +55,21 @@ export class SensogramaService {
       this.minimoB = this.minimoPolinomial(dadosAIMB).toFixed(3);
       this._indicesMinimoB.push(parseFloat(this.minimoB));
 
+      this.calculateAsymmetryWidth(this.minimoR, dadosAIM);
+
 
     } else if (choise == 3) {
       //IMPLEMENTAR O MÉTODO DO CENTROID
-      this.minimoR = this.minimoHunter(dadosAIM).toFixed(3);
+      this.minimoR = this.centroide(dadosAIM, this.baseline, this.posCR, this.posCL).toFixed(3);
       this._indicesMinimoR.push(parseFloat(this.minimoR));
 
-      this.minimoG = this.minimoHunter(dadosAIMG).toFixed(3);
+      this.minimoG = this.centroide(dadosAIM, this.baseline, this.posCR, this.posCL).toFixed(3);
       this._indicesMinimoG.push(parseFloat(this.minimoG));
 
-      this.minimoB = this.minimoHunter(dadosAIMB).toFixed(3);
+      this.minimoB = this.centroide(dadosAIM, this.baseline, this.posCR, this.posCL).toFixed(3);
       this._indicesMinimoB.push(parseFloat(this.minimoB));
+
+      this.calculateAsymmetryWidth(this.minimoR, dadosAIM);
 
     } else {
       this.minimoR = this.minimoHunter(dadosAIM).toFixed(3);
@@ -73,41 +81,62 @@ export class SensogramaService {
       this.minimoB = this.minimoHunter(dadosAIMB).toFixed(3);
       this._indicesMinimoB.push(parseFloat(this.minimoB));
 
+      this.calculateAsymmetryWidth(this.minimoR, dadosAIM);
+
     }
 
   }
 
   calculateAsymmetryWidth( currentMinimun, dataAIM ) {
-    let max = 0;
-    for (let j = 0; j < dataAIM.length; j++) {
-      if (max < dataAIM[j]) {
-        max = dataAIM[j];
-      }
-    }
+    let max = Math.max.apply(Math, dataAIM);
+    let min = Math.min.apply(Math, dataAIM);
 
-    let teta_medio = (max + parseFloat(currentMinimun)) / 2;
+    let teta_medio = (max + min) / 2;
 
     let aux = 0;
     let valorCL = 0;
     let valorCR = 0;
+    let posCR = 0;
+    let posCL = 0;
     for (let k = 0; k < dataAIM.length; k++) {
       if (dataAIM[k] <= teta_medio) {
         if (aux == 0) {
-          valorCL = dataAIM[k];
+          valorCR = dataAIM[k];
+          posCR = k;
           aux++;
         } else {
-          valorCR = dataAIM[k];
+          valorCL = dataAIM[k];
+          posCL = k;
         }
       }
     }
 
-  this.largura = parseFloat("" + (valorCL - valorCR).toFixed(3));
-  this.assimetria = parseFloat("" + (valorCL / valorCR).toFixed(3));
+  this.largura = parseFloat("" + (valorCL + valorCR).toFixed(4));
+  this.assimetria = parseFloat("" + (valorCL / valorCR).toFixed(4));
+  this.posCR = posCR;
+  this.posCL = posCL;
 
   this.indicesAssimetry.push(this.assimetria);
   this.indicesWidth.push(this.largura);
   }
 
+  centroide(data:[number], baseLine: number, posCR: number, posCL: number) {
+
+    let valuesI: number = 0;
+    let valuesII: number = 0;
+
+    //let array = data.slice(posCR, posCL + 1);
+
+    for (let pos = posCR; pos < posCL + 1; pos++) {
+
+      valuesI = valuesI + ((data[pos] - baseLine) * (pos+1));
+
+      valuesII = valuesII + (data[pos] - baseLine);
+    }
+
+    let cent: number = valuesI / valuesII;
+    return Math.round(cent)
+  };
 
   //Método de caça ao mínimo (Min Hunter)
   minimoHunter(dadosAIM) {

@@ -635,7 +635,7 @@ export class View {
             } else if (data == "polinomyal") {
               this.cameraService.choiseMinCS = 2;
             } else if (data == "centroid") {
-              this.cameraService.choiseMinCS = 3;
+              this.baseline();
             } else {
               this.cameraService.choiseMinCS = 1;
             }
@@ -647,6 +647,37 @@ export class View {
     });
 
     await alert.present();
+  }
+
+  async baseline() {
+    const prompt = await this.alertCtrl.create({
+      header: "BaseLine1",
+      message: "Enter the baseline value",
+      inputs: [
+        {
+          name: "baseLine",
+          placeholder: "BaseLine",
+          type: "number",
+        },
+      ],
+      buttons: [
+        {
+          text: "Cancel",
+          handler: (data) => {
+            console.log("Cancel clicked");
+          },
+        },
+        {
+          text: "Save",
+          handler: (data) => {
+            this.sensogramaService.baseline = parseFloat(data.baseLine);
+            this.cameraService.choiseMinCS = 3;
+
+          },
+        },
+      ],
+    });
+    await prompt.present();
   }
 
   //MÉTODO RESPONSÁVEL POR ALTERAR A POSIÇÃO DO CARD DA FONTE DE LUZ
