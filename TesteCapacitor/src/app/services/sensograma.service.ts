@@ -4,11 +4,11 @@ import PolynomialRegression from 'ml-regression-polynomial';
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class SensogramaService {
   private _minimoR;
-
   private _minimoG;
-
   private _minimoB;
 
   largura: number;
@@ -34,25 +34,25 @@ export class SensogramaService {
   async  calculaMin(choise, dadosAIM, dadosAIMG, dadosAIMB) {
 
     if (choise == 1) {
-      this.minimoR = this.minimoHunter(dadosAIM).toFixed(3);
+      this.minimoR = Math.round(this.minimoHunter(dadosAIM));
       this._indicesMinimoR.push(parseFloat(this.minimoR));
 
-      this.minimoG = this.minimoHunter(dadosAIMG).toFixed(3);
+      this.minimoG = Math.round(this.minimoHunter(dadosAIMG));
       this._indicesMinimoG.push(parseFloat(this.minimoG));
 
-      this.minimoB = this.minimoHunter(dadosAIMB).toFixed(3);
+      this.minimoB = Math.round(this.minimoHunter(dadosAIMB));
       this._indicesMinimoB.push(parseFloat(this.minimoB));
 
       this.calculateAsymmetryWidth(this.minimoR, dadosAIM);
 
     } else if (choise == 2) {
-      this.minimoR = this.minimoPolinomial(dadosAIM).toFixed(3);
+      this.minimoR = Math.round(this.minimoPolinomial(dadosAIM));
       this._indicesMinimoR.push(parseFloat(this.minimoR));
 
-      this.minimoG = this.minimoPolinomial(dadosAIMG).toFixed(3);
+      this.minimoG = Math.round(this.minimoPolinomial(dadosAIMG));
       this._indicesMinimoR.push(parseFloat(this.minimoG));
 
-      this.minimoB = this.minimoPolinomial(dadosAIMB).toFixed(3);
+      this.minimoB = Math.round(this.minimoPolinomial(dadosAIMB));
       this._indicesMinimoB.push(parseFloat(this.minimoB));
 
       this.calculateAsymmetryWidth(this.minimoR, dadosAIM);
@@ -60,25 +60,25 @@ export class SensogramaService {
 
     } else if (choise == 3) {
       //IMPLEMENTAR O MÉTODO DO CENTROID
-      this.minimoR = this.centroide(dadosAIM, this.baseline, this.posCR, this.posCL).toFixed(3);
+      this.minimoR = Math.round(this.centroide(dadosAIM, this.baseline));
       this._indicesMinimoR.push(parseFloat(this.minimoR));
 
-      this.minimoG = this.centroide(dadosAIM, this.baseline, this.posCR, this.posCL).toFixed(3);
+      this.minimoG = Math.round(this.centroide(dadosAIM, this.baseline));
       this._indicesMinimoG.push(parseFloat(this.minimoG));
 
-      this.minimoB = this.centroide(dadosAIM, this.baseline, this.posCR, this.posCL).toFixed(3);
+      this.minimoB = Math.round(this.centroide(dadosAIM, this.baseline));
       this._indicesMinimoB.push(parseFloat(this.minimoB));
 
       this.calculateAsymmetryWidth(this.minimoR, dadosAIM);
 
     } else {
-      this.minimoR = this.minimoHunter(dadosAIM).toFixed(3);
+      this.minimoR = Math.round(this.minimoHunter(dadosAIM));
       this._indicesMinimoR.push(parseFloat(this.minimoR));
 
-      this.minimoG = this.minimoHunter(dadosAIMG).toFixed(3);
+      this.minimoG = Math.round(this.minimoHunter(dadosAIMG));
       this._indicesMinimoG.push(parseFloat(this.minimoG));
 
-      this.minimoB = this.minimoHunter(dadosAIMB).toFixed(3);
+      this.minimoB = Math.round(this.minimoHunter(dadosAIMB));
       this._indicesMinimoB.push(parseFloat(this.minimoB));
 
       this.calculateAsymmetryWidth(this.minimoR, dadosAIM);
@@ -87,47 +87,56 @@ export class SensogramaService {
 
   }
 
-  calculateAsymmetryWidth( currentMinimun, dataAIM ) {
+  getClCr(dataAIM) {
     let max = Math.max.apply(Math, dataAIM);
     let min = Math.min.apply(Math, dataAIM);
 
     let teta_medio = (max + min) / 2;
 
     let aux = 0;
-    let valorCL = 0;
-    let valorCR = 0;
+    let CL = 0;
+    let CR = 0;
     let posCR = 0;
     let posCL = 0;
     for (let k = 0; k < dataAIM.length; k++) {
       if (dataAIM[k] <= teta_medio) {
         if (aux == 0) {
-          valorCR = dataAIM[k];
+          CR = dataAIM[k];
           posCR = k;
           aux++;
         } else {
-          valorCL = dataAIM[k];
+          CL = dataAIM[k];
           posCL = k;
         }
       }
     }
-
-  this.largura = parseFloat("" + (valorCL + valorCR).toFixed(4));
-  this.assimetria = parseFloat("" + (valorCL / valorCR).toFixed(4));
-  this.posCR = posCR;
-  this.posCL = posCL;
-
-  this.indicesAssimetry.push(this.assimetria);
-  this.indicesWidth.push(this.largura);
+    return {
+      "valorCR": CR,
+      "valorCL": CL,
+      "posCR": posCR,
+      "posCL": posCL
+    };
   }
 
-  centroide(data:[number], baseLine: number, posCR: number, posCL: number) {
+  calculateAsymmetryWidth( currentMinimun, dataAIM ) {
+    let centroid = this.getClCr(dataAIM);
+
+    this.largura = parseFloat("" + (centroid.valorCL + centroid.valorCR).toFixed(4));
+    this.assimetria = parseFloat("" + (centroid.valorCL / centroid.valorCR).toFixed(4));
+
+    this.indicesAssimetry.push(this.assimetria);
+    this.indicesWidth.push(this.largura);
+  }
+
+  centroide(data:[number], baseLine: number) {
+    let centroid = this.getClCr(data);
 
     let valuesI: number = 0;
     let valuesII: number = 0;
 
     //let array = data.slice(posCR, posCL + 1);
 
-    for (let pos = posCR; pos < posCL + 1; pos++) {
+    for (let pos = centroid.posCR; pos < centroid.posCL + 1; pos++) {
 
       valuesI = valuesI + ((data[pos] - baseLine) * (pos+1));
 
@@ -139,18 +148,11 @@ export class SensogramaService {
   };
 
   //Método de caça ao mínimo (Min Hunter)
-  minimoHunter(dadosAIM) {
-    let minHunX;
-    let min = 255.0;
-    for (let i = 0; i < dadosAIM.length; i++) {
-      if (min > dadosAIM[i]) {
-        min = dadosAIM[i];
-        minHunX = i;
-      }
-    }
+  minimoHunter(dataAIM:[number]) {
+    let valueMin = Math.min.apply(Math, dataAIM);
+    let posMin = dataAIM.indexOf(valueMin);
 
-    return minHunX;
-
+    return posMin;
   }
 
   //Método de mínimo por Regressão Polinomial
@@ -162,24 +164,10 @@ export class SensogramaService {
       x[i] = i
     }
     const regression = new PolynomialRegression(x, dadosAIM, degree);
-    //console.log(regression.predict(41)); // Apply the model to some x value. Prints 2.6.
-    //console.log(regression.coefficients); // Prints the coefficients in increasing order of power (from 0 to degree).
-    // console.log(regression.toString(3)); // Prints a human-readable version of the function.
-    //console.log(regression.toLaTeX());
-    //console.log(regression.score(x, y));
-    //alert(3);
     const a = regression.coefficients[2];
     const b = regression.coefficients[1];
     const c = regression.coefficients[0];
-
-    //alert(4);
     let regressionMin = (-b / (2 * a));
-
-    console.log("Mínimo: y " + (b ^ 2 - 4 * a * c) / (-4 * a));
-    // alert(regressionMin);
-    //alert(5);
-
-
 
     return regressionMin;
 

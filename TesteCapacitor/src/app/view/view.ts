@@ -651,7 +651,7 @@ export class View {
 
   async baseline() {
     const prompt = await this.alertCtrl.create({
-      header: "BaseLine1",
+      header: "BaseLine",
       message: "Enter the baseline value",
       inputs: [
         {
