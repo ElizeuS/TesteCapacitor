@@ -90,6 +90,7 @@ export class SensogramaService {
   getClCr(dataAIM) {
     let max = Math.max.apply(Math, dataAIM);
     let min = Math.min.apply(Math, dataAIM);
+    let posMin = dataAIM.indexOf(min);
 
     let teta_medio = (max + min) / 2;
 
@@ -101,15 +102,16 @@ export class SensogramaService {
     for (let k = 0; k < dataAIM.length; k++) {
       if (dataAIM[k] <= teta_medio) {
         if (aux == 0) {
-          CR = dataAIM[k];
-          posCR = k;
+          posCR = k + 1;
           aux++;
         } else {
-          CL = dataAIM[k];
-          posCL = k;
+          posCL = k + 1;
         }
       }
     }
+
+    CR = posMin - posCR;
+    CL = posCL - posMin;
     return {
       "valorCR": CR,
       "valorCL": CL,
@@ -143,7 +145,7 @@ export class SensogramaService {
       valuesII = valuesII + (data[pos] - baseLine);
     }
 
-    let cent: number = valuesI / valuesII;
+    let cent: number = (valuesI / valuesII);
     return Math.round(cent)
   };
 
