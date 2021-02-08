@@ -498,7 +498,6 @@ export class View {
    * @method clear() este método limpa os valores dos sensogramas de mínimo, assimetria e largura.
    * */
   clear() {
-    alert(this.sensogramaService.indicesAssimetry)
     this.sensogramaService.indicesMinimoR = [];
     this.sensogramaService.indicesMinimoG = [];
     this.sensogramaService.indicesMinimoB = [];
