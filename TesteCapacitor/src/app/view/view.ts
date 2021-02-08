@@ -498,12 +498,14 @@ export class View {
    * @method clear() este método limpa os valores dos sensogramas de mínimo, assimetria e largura.
    * */
   clear() {
+    alert(this.sensogramaService.indicesAssimetry)
     this.sensogramaService.indicesMinimoR = [];
     this.sensogramaService.indicesMinimoG = [];
     this.sensogramaService.indicesMinimoB = [];
 
     this.sensogramaService.indicesAssimetry = [];
     this.sensogramaService.indicesWidth = [];
+
   }
 
   public corEvento(comprimentoDeOnda) {
@@ -835,7 +837,9 @@ export class View {
       "Reference" : "Sensograma",
       "minValuesR" : this.sensogramaService.indicesMinimoR,
       "minValuesG" : this.sensogramaService.indicesMinimoG,
-      "minValuesB" : this.sensogramaService.indicesMinimoB
+      "minValuesB": this.sensogramaService.indicesMinimoB,
+      "widthValues": this.sensogramaService.indicesWidth,
+      "assimetryValues": this.sensogramaService.indicesAssimetry
     };
 
     let aimValues = {
