@@ -303,7 +303,7 @@ export class View {
           //data: []
         },
         {
-          name: "Assimetry",
+          name: "Asymmetry",
           color: "rgba(0, 255, 0, 1)",
           type: undefined,
           visible: false,
@@ -838,7 +838,7 @@ export class View {
       "minValuesG" : this.sensogramaService.indicesMinimoG,
       "minValuesB": this.sensogramaService.indicesMinimoB,
       "widthValues": this.sensogramaService.indicesWidth,
-      "assimetryValues": this.sensogramaService.indicesAssimetry
+      "asymmetryValues": this.sensogramaService.indicesAssimetry
     };
 
     let aimValues = {

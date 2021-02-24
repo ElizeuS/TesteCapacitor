@@ -26,7 +26,7 @@
 
     <ion-grid class="texts">
         <ion-row>
-            <ion-col class="centeringContent">Assimetry</ion-col>
+            <ion-col class="centeringContent">Asymmetry</ion-col>
             <ion-col class="centeringContent">Min</ion-col>
             <ion-col class="centeringContent">Width</ion-col>
         </ion-row>
@@ -62,8 +62,8 @@
                         <ion-icon name="eye"></ion-icon>
                     </ion-fab-button>
                     <ion-fab-list side="top">
-                        <ion-fab-button color="light" size="small" (click)="cardSize()" id="advancedMode4">
-                            <ion-icon name="bulb"></ion-icon>
+                        <ion-fab-button color="light" size="small" (click)="hideShowCam()">
+                            <ion-icon name="camera"></ion-icon>
                         </ion-fab-button>
                         <ion-fab-button (click)="clickHide()" id="advancedMode3" color="light" size="small">
                             <ion-icon name="md-color-filter"></ion-icon>
@@ -90,9 +90,10 @@
                 </ion-fab>
             </ion-col>
             <ion-col class="ion-align-self-start">
-                <ion-fab-button id="advancedMode2" color="light" size="small" (click)="hideShowCam()">
-                    <ion-icon name="camera"></ion-icon>
+                <ion-fab-button color="light" size="small" (click)="cardSize()" id="advancedMode4">
+                    <ion-icon name="bulb"></ion-icon>
                 </ion-fab-button>
+
             </ion-col>
             <ion-col class="ion-align-self-start">
                 <ion-fab-button color="light" size="small" (click)=" downloadFiles()">
