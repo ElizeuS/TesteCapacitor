@@ -37,7 +37,7 @@
     "@types/highcharts": "^5.0.44",
     "@types/protractor": "^4.0.0",
     "clovelced-plugin-audiomanagement": "^1.0.2",
-    "cordova-android": "7.1.4",
+    "cordova-android": "11.0.0",
     "cordova-plugin-brightness": "^0.2.0",
     "cordova-plugin-camera-preview": "^0.10.0",
     "cordova-plugin-device": "^2.0.3",
